@@ -55,3 +55,24 @@ sub violates {
 }
 
 1;
+
+=encoding utf-8
+
+=head1 NAME
+
+TooMuchCode::ProhibitUnusedConstant -- Find unused constants.
+
+=head1 DESCRIPTION
+
+This policy finds constant declaration by "constant" pragma, and further look for their exists in the rest code.
+(The scope of searching is with the same file.)
+
+It identifyes constants defined in two simple forms, such as:
+
+    use constant PI => 3.14;
+
+... and
+
+    use constant { PI => 3.14, TAU => 6.28 };
+
+=cut
