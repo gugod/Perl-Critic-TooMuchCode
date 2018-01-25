@@ -50,3 +50,17 @@ sub violates {
 }
 
 1;
+
+=encoding utf-8
+
+=head1 NAME
+
+TooMuchCode::ProhibitUnusedImport -- Find 'use utf8' statement that produces (almost) no effect.
+
+=head1 DESCRIPTION
+
+The utf8 pragma is used to declare that the source code itself can be decoded by utf-8 encoding rule
+as a sequence of characters. What this means is that all the characetrs it the code are within the
+ASCII range.
+
+=cut
