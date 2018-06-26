@@ -44,7 +44,6 @@ sub gather_violtaions_objective {
     my @violations;
 
     for my $class_name (qw(HTTP::Tiny HTTP::Lite LWP::UserAgent File::Spec)) {
-        print "Try: $class_name\n";
         my @include_statements = grep { $_->module eq $class_name } @{ $elem->find('PPI::Statement::Include') ||[] };
         next unless @include_statements;
 
