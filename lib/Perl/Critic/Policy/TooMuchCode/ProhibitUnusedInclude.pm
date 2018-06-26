@@ -15,6 +15,7 @@ sub applies_to           { return 'PPI::Document' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     my @violations = $self->gather_violtaions_trytiny($elem, $doc);
+    push @violations, $self->gather_violtaions_filespec($elem, $doc);
     return @violations;
 }
 
@@ -35,6 +36,25 @@ sub gather_violtaions_trytiny {
     return map {
         $self->violation("Unused Try::Tiny module", "There are no `try` block in the code.", $_);
     } @use_try_tiny;
+}
+
+sub gather_violtaions_filespec {
+    my ( $self, $elem, $doc ) = @_;
+
+    my @include_statements = grep { $_->module eq 'File::Spec' } @{ $elem->find('PPI::Statement::Include') ||[] };
+    return () unless 0 < @include_statements;
+
+    my $is_unused = ! $elem->find(
+        sub {
+            my $el = $_[1];
+            $el->isa('PPI::Token::Word') && $el->content eq 'File::Spec' && !($el->parent->isa('PPI::Statement::Include'))
+        }
+    );
+
+    return unless $is_unused;
+    return map {
+        $self->violation("Unused File::Spec module.", "No methods from File::Spec are invoked.", $_)
+    } @include_statements;
 }
 
 1;
