@@ -1,1 +1,0 @@
-# Perl-Critic-TooMuchCode
