@@ -15,27 +15,7 @@ sub applies_to           { return 'PPI::Document' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     my @violations = $self->gather_violtaions_generic($elem, $doc);
-    push @violations, $self->gather_violtaions_trytiny($elem, $doc);
     return @violations;
-}
-
-sub gather_violtaions_trytiny {
-    my ( $self, $elem, $doc ) = @_;
-    my @use_try_tiny = grep { $_->module eq 'Try::Tiny' } @{ $elem->find('PPI::Statement::Include') ||[] };
-    return () unless 0 < @use_try_tiny;
-
-    my $has_try_block = 0;
-    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq "try" }) ||[]}) {
-        my $try_block = $try_keyword->snext_sibling or next;
-        next unless $try_block->isa('PPI::Structure::Block');
-        $has_try_block = 1;
-        last;
-    }
-    return () if $has_try_block;
-
-    return map {
-        $self->violation("Unused Try::Tiny module", "There are no `try` block in the code.", $_);
-    } @use_try_tiny;
 }
 
 sub gather_violtaions_generic {
