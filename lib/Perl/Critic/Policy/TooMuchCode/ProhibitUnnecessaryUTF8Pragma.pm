@@ -8,7 +8,7 @@ use parent 'Perl::Critic::Policy';
 
 our $VERSION = '0.01';
 
-sub default_themes       { return qw( tests )     }
+sub default_themes       { return qw( bugs maintenance )     }
 sub applies_to           { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
