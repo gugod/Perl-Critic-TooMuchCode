@@ -15,7 +15,7 @@ sub applies_to           { return 'PPI::Document' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     my @violations = $self->gather_violtaions_trytiny($elem, $doc);
-    push @violations, $self->gather_violtaions_filespec($elem, $doc);
+    push @violations, $self->gather_violtaions_objective($elem, $doc);
     return @violations;
 }
 
@@ -38,23 +38,30 @@ sub gather_violtaions_trytiny {
     } @use_try_tiny;
 }
 
-sub gather_violtaions_filespec {
+sub gather_violtaions_objective {
     my ( $self, $elem, $doc ) = @_;
 
-    my @include_statements = grep { $_->module eq 'File::Spec' } @{ $elem->find('PPI::Statement::Include') ||[] };
-    return () unless 0 < @include_statements;
+    my @violations;
 
-    my $is_unused = ! $elem->find(
-        sub {
-            my $el = $_[1];
-            $el->isa('PPI::Token::Word') && $el->content eq 'File::Spec' && !($el->parent->isa('PPI::Statement::Include'))
+    for my $class_name (qw(HTTP::Tiny HTTP::Lite LWP::UserAgent File::Spec)) {
+        print "Try: $class_name\n";
+        my @include_statements = grep { $_->module eq $class_name } @{ $elem->find('PPI::Statement::Include') ||[] };
+        next unless @include_statements;
+
+        my $is_used = $elem->find(
+            sub {
+                my $el = $_[1];
+                $el->isa('PPI::Token::Word') && $el->content eq $class_name && !($el->parent->isa('PPI::Statement::Include'))
+            }
+        );
+
+        unless ($is_used) {
+            push @violations, map {
+                $self->violation("Unused ${class_name} module.", "No methods from ${class_name} are invoked.", $_)
+            } @include_statements;
         }
-    );
-
-    return unless $is_unused;
-    return map {
-        $self->violation("Unused File::Spec module.", "No methods from File::Spec are invoked.", $_)
-    } @include_statements;
+    }
+    return @violations;
 }
 
 1;
