@@ -14,11 +14,11 @@ sub applies_to           { return 'PPI::Document' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    my @violations = $self->gather_violtaions_generic($elem, $doc);
+    my @violations = $self->gather_violations_generic($elem, $doc);
     return @violations;
 }
 
-sub gather_violtaions_generic {
+sub gather_violations_generic {
     my ( $self, $elem, $doc ) = @_;
 
     my %imported;

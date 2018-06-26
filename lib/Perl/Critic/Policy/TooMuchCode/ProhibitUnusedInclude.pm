@@ -14,12 +14,12 @@ sub applies_to           { return 'PPI::Document' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    my @violations = $self->gather_violtaions_trytiny($elem, $doc);
-    push @violations, $self->gather_violtaions_objective($elem, $doc);
+    my @violations = $self->gather_violations_trytiny($elem, $doc);
+    push @violations, $self->gather_violations_objective($elem, $doc);
     return @violations;
 }
 
-sub gather_violtaions_trytiny {
+sub gather_violations_trytiny {
     my ( $self, $elem, $doc ) = @_;
     my @use_try_tiny = grep { $_->module eq 'Try::Tiny' } @{ $elem->find('PPI::Statement::Include') ||[] };
     return () unless 0 < @use_try_tiny;
@@ -38,7 +38,7 @@ sub gather_violtaions_trytiny {
     } @use_try_tiny;
 }
 
-sub gather_violtaions_objective {
+sub gather_violations_objective {
     my ( $self, $elem, $doc ) = @_;
 
     my @violations;
