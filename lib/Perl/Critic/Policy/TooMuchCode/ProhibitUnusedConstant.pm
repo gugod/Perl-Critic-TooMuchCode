@@ -3,9 +3,9 @@ package Perl::Critic::Policy::TooMuchCode::ProhibitUnusedConstant;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
+use PPIx::Utils::Traversal qw(get_constant_name_elements_from_declaring_statement);
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '0.01';
 
 sub default_themes       { return qw( maintenance )     }
 sub applies_to           { return 'PPI::Document' }
@@ -20,16 +20,10 @@ sub violates {
 
     my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') }) || [];
     for my $st (@$include_statements) {
-        next unless $st->schild(0) eq "use" && $st->schild(1) eq "constant";
-        if ($st->schild(2)->isa("PPI::Token::Word")) {
-            my $constant_name = $st->schild(2);
-            push @{ $defined_constants{"$constant_name"} }, $constant_name;
-        } elsif ($st->schild(2)->isa("PPI::Structure::Constructor")) {
-            my $odd = 0;
-            my @elems = @{ $st->schild(2)->find(sub { $_[1]->isa("PPI::Token") && $_[1]->significant && (! $_[1]->isa("PPI::Token::Operator")) && ($odd = 1 - $odd) }) };
-            for my $el (@elems) {
-                push @{ $defined_constants{"$el"} }, $el;
-            }
+        next unless $st->schild(0) eq "use" && $st->module eq "constant";
+        my @constants = get_constant_name_elements_from_declaring_statement( $st );
+        for my $tok (@constants) {
+            push @{ $defined_constants{"$tok"} }, $tok;
         }
     }
 
