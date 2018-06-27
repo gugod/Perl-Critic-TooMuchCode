@@ -14,15 +14,18 @@ sub applies_to           { return 'PPI::Document' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    my @violations = $self->gather_violations_trytiny($elem, $doc);
+    my @violations = $self->gather_violations_try_family($elem, $doc);
     push @violations, $self->gather_violations_objective($elem, $doc);
     return @violations;
 }
 
-sub gather_violations_trytiny {
+sub gather_violations_try_family {
     my ( $self, $elem, $doc ) = @_;
-    my @use_try_tiny = grep { $_->module eq 'Try::Tiny' } @{ $elem->find('PPI::Statement::Include') ||[] };
-    return () unless 0 < @use_try_tiny;
+
+    my @violations;
+
+    my @includes = @{ $elem->find('PPI::Statement::Include') ||[] };
+    return @violations unless @includes;
 
     my $has_try_block = 0;
     for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq "try" }) ||[]}) {
@@ -31,11 +34,15 @@ sub gather_violations_trytiny {
         $has_try_block = 1;
         last;
     }
-    return () if $has_try_block;
 
-    return map {
-        $self->violation("Unused Try::Tiny module", "There are no `try` block in the code.", $_);
-    } @use_try_tiny;
+    for my $try_module (qw(Try::Tiny Try::Catch Try::Lite TryCatch Try)) {
+        my @uses = grep { $_->module eq $try_module } @includes;
+        if (@uses && !$has_try_block) {
+            push @violations, map { $self->violation("Unused ${try_module} module", "There are no `try` block in the code.", $_) } @uses;
+        }
+    }
+
+    return @violations;
 }
 
 sub gather_violations_objective {
