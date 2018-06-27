@@ -5,8 +5,6 @@ use warnings;
 use Perl::Critic::Utils;
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '0.01';
-
 sub default_themes       { return qw(maintenance)     }
 sub applies_to           { return 'PPI::Document' }
 

@@ -6,7 +6,6 @@ use Perl::Critic::Utils;
 use PPIx::Utils::Traversal qw(get_constant_name_elements_from_declaring_statement);
 use parent 'Perl::Critic::Policy';
 
-
 sub default_themes       { return qw( maintenance )     }
 sub applies_to           { return 'PPI::Document' }
 
