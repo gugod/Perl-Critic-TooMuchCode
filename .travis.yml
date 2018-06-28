@@ -9,7 +9,7 @@ perl:
   - "5.18"
 
 before_install:
-  - cpanm Test2::Harness
+  - cpanm --notest Test2::Harness
 
 script:
   yath --qvf
