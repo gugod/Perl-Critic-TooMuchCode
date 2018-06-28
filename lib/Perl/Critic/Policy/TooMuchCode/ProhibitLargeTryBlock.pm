@@ -16,7 +16,7 @@ sub violates {
 
     return @violations unless $self->__use_try_tiny($elem);
 
-    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq "try" }) ||[]}) {
+    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq 'try' }) ||[]}) {
         my $try_block = $try_keyword->snext_sibling or next;
         next unless $try_block->isa('PPI::Structure::Block');
 
@@ -24,7 +24,7 @@ sub violates {
         my $statement_count = @$s;
         next unless $statement_count > $limit;
 
-        push @violations, $self->violation("try block is too large", "The statement count in this block is ${statement_count}, larger then the limit of ${limit}", $try_block);
+        push @violations, $self->violation('try block is too large', "The statement count in this block is ${statement_count}, larger then the limit of ${limit}", $try_block);
     }
 
     return @violations;

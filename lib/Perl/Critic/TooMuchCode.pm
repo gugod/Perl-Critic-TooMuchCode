@@ -1,5 +1,5 @@
 package Perl::Critic::TooMuchCode;
-our $VERSION="0.02";
+our $VERSION='0.02';
 1;
 __END__
 

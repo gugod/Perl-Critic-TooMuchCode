@@ -17,7 +17,7 @@ sub violates {
     my $use_utf8_statements = $elem->find(
         sub {
             my $st = $_[1];
-            $st->isa('PPI::Statement::Include') && $st->schild(0) eq "use" && $st->schild(1) eq "utf8";
+            $st->isa('PPI::Statement::Include') && $st->schild(0) eq 'use' && $st->schild(1) eq 'utf8';
         }
     );
     return unless $use_utf8_statements;
@@ -28,7 +28,7 @@ sub violates {
         my $src = $tok->content;
         utf8::decode($src);
 
-        my @c = split "", $src;
+        my @c = split /\s+/, $src;
         for (my $i = 0; $i < @c; $i++) {
             if (ord($c[$i]) > 127) {
                 $chars_outside_ascii_range++;
@@ -40,7 +40,7 @@ sub violates {
     unless ($chars_outside_ascii_range) {
         return $self->violation(
             "'use utf8;' seems to be unnecessary",
-            "All characters in the source code are within ASCII range.",
+            'All characters in the source code are within ASCII range.',
             $use_utf8_statements->[0],
         );
     }

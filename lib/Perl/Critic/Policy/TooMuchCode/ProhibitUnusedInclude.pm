@@ -26,7 +26,7 @@ sub gather_violations_try_family {
     return @violations unless @includes;
 
     my $has_try_block = 0;
-    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq "try" }) ||[]}) {
+    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq 'try' }) ||[]}) {
         my $try_block = $try_keyword->snext_sibling or next;
         next unless $try_block->isa('PPI::Structure::Block');
         $has_try_block = 1;
@@ -36,7 +36,7 @@ sub gather_violations_try_family {
     for my $try_module (qw(Try::Tiny Try::Catch Try::Lite TryCatch Try)) {
         my @uses = grep { $_->module eq $try_module } @includes;
         if (@uses && !$has_try_block) {
-            push @violations, map { $self->violation("Unused ${try_module} module", "There are no `try` block in the code.", $_) } @uses;
+            push @violations, map { $self->violation("Unused ${try_module} module", 'There are no `try` block in the code.', $_) } @uses;
         }
     }
 
