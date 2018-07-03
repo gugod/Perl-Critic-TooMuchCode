@@ -38,7 +38,6 @@ sub __use_try_tiny {
 
 1;
 
-
 =encoding utf-8
 
 =head1 NAME
