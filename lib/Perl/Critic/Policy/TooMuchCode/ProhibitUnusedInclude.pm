@@ -80,7 +80,7 @@ TooMuchCode::ProhibitUnusedInclude -- Find unused include statements.
 
 This critic policy scans for unused include statement according to their documentation.
 
-For example, L<Try::Tiny> implicity introduce a C<try> subroutine that takes a block. There fore, A
+For example, L<Try::Tiny> implicity introduce a C<try> subroutine that takes a block. Therefore, a
 lonely C<use Try::Tiny> statement without a C<try { .. }> block somewhere in its scope is considered
 to be an "Unused Include".
 

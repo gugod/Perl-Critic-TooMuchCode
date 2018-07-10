@@ -47,7 +47,7 @@ TooMuchCode::ProhibitLargeTryBlock -- Find oversized `try..catch` block.
 =head1 DESCRIPTION
 
 You may or may not consider it a bad idea to have a lot of code in a
-C<try> block.  And if you do, this module can be used to catch the
-oversize try blocks.
+C<try> block.  If you do, this module can be used to catch the
+oversized try blocks.
 
 =cut
