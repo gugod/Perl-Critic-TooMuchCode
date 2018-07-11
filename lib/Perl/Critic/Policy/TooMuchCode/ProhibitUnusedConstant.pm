@@ -57,10 +57,10 @@ TooMuchCode::ProhibitUnusedConstant -- Find unused constants.
 
 =head1 DESCRIPTION
 
-This policy finds constant declaration by "constant" pragma, and further look for their exists in the rest code.
-(The scope of searching is with the same file.)
+This policy finds constant declarations by "constant" pragma, and further looks to see if they exist in the rest of the code.
+(The scope of searching is within the same file.)
 
-It identifyes constants defined in two simple forms, such as:
+It identifies constants defined in two simple forms, such as:
 
     use constant PI => 3.14;
 

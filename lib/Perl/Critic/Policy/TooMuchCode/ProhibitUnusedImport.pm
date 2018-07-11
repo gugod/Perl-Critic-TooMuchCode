@@ -75,11 +75,11 @@ TooMuchCode::ProhibitUnusedImport -- Find unused imports
 
 =head1 DESCRIPTION
 
-An "Unused Import" is usually a subroutine name imported by an C<use> statement.
+An "Unused Import" is usually a subroutine name imported by a C<use> statement.
 For example, the word C<Dumper> in the following statement:
 
     use Data::Dumper qw<Dumper>;
 
-If the rest of program has not mention the word C<Dumper>, then it can be deleted.
+If the rest of program has not mentioned the word C<Dumper>, then it can be deleted.
 
 =cut
