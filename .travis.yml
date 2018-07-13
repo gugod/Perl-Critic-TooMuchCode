@@ -8,6 +8,7 @@ perl:
   - "5.18"
 
 before_install:
+  - cpanm --notest List::Util@1.50
   - cpanm --notest Test2::Harness
 
 script:
