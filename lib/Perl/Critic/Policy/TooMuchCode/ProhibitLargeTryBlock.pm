@@ -6,28 +6,23 @@ use Perl::Critic::Utils;
 use parent 'Perl::Critic::Policy';
 
 sub default_themes       { return qw(maintenance)     }
-sub applies_to           { return 'PPI::Document' }
+sub applies_to           { return 'PPI::Structure::Block' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     my $limit = $self->{try_block_statement_count_limit} || 10;
 
+    return unless $self->__use_try_tiny($doc);
     my @violations;
 
-    return @violations unless $self->__use_try_tiny($elem);
+    my $word_before = $elem->sprevious_sibling;
+    return unless $word_before && $word_before->isa('PPI::Token::Word') && $word_before->content eq 'try';
 
-    for my $try_keyword (@{ $elem->find(sub { $_[1]->isa('PPI::Token::Word') && $_[1]->content eq 'try' }) ||[]}) {
-        my $try_block = $try_keyword->snext_sibling or next;
-        next unless $try_block->isa('PPI::Structure::Block');
+    my $s = $elem->find('PPI::Statement') or return;
+    my $statement_count = @$s;
+    return unless $statement_count > $limit;
 
-        my $s = $try_block->find('PPI::Statement') or next;
-        my $statement_count = @$s;
-        next unless $statement_count > $limit;
-
-        push @violations, $self->violation('try block is too large', "The statement count in this block is ${statement_count}, larger then the limit of ${limit}", $try_block);
-    }
-
-    return @violations;
+    return $self->violation('try block is too large', "The statement count in this block is ${statement_count}, larger then the limit of ${limit}", $elem);
 }
 
 sub __use_try_tiny {
