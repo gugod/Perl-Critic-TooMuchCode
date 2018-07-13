@@ -39,8 +39,8 @@ TooMuchCode::ProhibitLargeBlock -- Find oversized blocks
 
 This policy scan for large code blocks of the following type.
 
-- map { ... }
-- grep { ... }
-- do { ... }
+    map { ... };
+    grep { ... };
+    do { ... };
 
 =cut
