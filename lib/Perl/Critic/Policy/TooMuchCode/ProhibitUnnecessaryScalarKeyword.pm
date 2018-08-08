@@ -21,4 +21,19 @@ sub violates {
     return $self->violation('Unnecessary scalar keyword', "Assigning an array to a scalar implies scalar context.", $elem);
 }
 
+__END__
+
+=head1 NAME
+
+TooMuchCode::ProhibitUnnecessaryScalarKeyword
+
+=head1 DESCRIPTION
+
+This policy dictates that the use of `scalar` for in statement like this needs to be removed:
+
+    my $n = scalar @items;
+
+If the left-hand side of assigiment is a single scalar variable, then the assignment is in scalar
+contetx. There is no need to add C<scalar> keyword.
+
 1;
