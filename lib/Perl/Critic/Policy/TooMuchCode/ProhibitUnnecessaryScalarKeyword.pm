@@ -21,6 +21,8 @@ sub violates {
     return $self->violation('Unnecessary scalar keyword', "Assigning an array to a scalar implies scalar context.", $elem);
 }
 
+1;
+
 __END__
 
 =head1 NAME
