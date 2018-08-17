@@ -40,15 +40,24 @@ sub gather_violations_generic {
 
 =head1 NAME
 
-TooMuchCode::ProhibitUnusedImport -- Find unused imports
+TooMuchCode::ProhibitExcessiveColons
 
 =head1 DESCRIPTION
 
-An "Unused Import" is usually a subroutine name imported by a C<use> statement.
-For example, the word C<Dumper> in the following statement:
+In an include statement, it is possible to have a lot of colons:
 
-    use Data::Dumper qw<Dumper>;
+    use Data::::Dumper;
 
-If the rest of program has not mentioned the word C<Dumper>, then it can be deleted.
+... or
+
+    use Data::::::::Dumper;
+
+As long as the number of colons is a multiple of two.
+
+However, just because it is doable, does not mean it is sensible.
+C<use Data::::::Dumper> will make perl look for C<lib/Data///Dumper.pm>,
+which is usually the same as C<lib/Data/Dumper.pm>.
+
+This policy restrict you to use only two colons to delimit one layer of namespace.
 
 =cut
