@@ -21,3 +21,23 @@ say 42;
 use constant A => 42;
 use constant B => A + 42;
 say B;
+
+## name constant in HashRef with a preceeding plus sign.
+## failures 2
+## cut
+
+use constant +{
+    FOO => 1,
+    BAR => 2,
+};
+say 42;
+
+## name constant in HashRef
+## failures 2
+## cut
+
+use constant {
+    FOO => 1,
+    BAR => 2,
+};
+say 42;
