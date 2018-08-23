@@ -12,3 +12,12 @@ say 42;
 use constant QUESTION => 42;
 use constant ANSWER => 42;
 say 42;
+
+
+## name constant in constant
+## failures 0
+## cut
+
+use constant A => 42;
+use constant B => A + 42;
+say B;

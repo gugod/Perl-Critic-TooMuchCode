@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 use PPIx::Utils::Traversal qw(get_constant_name_elements_from_declaring_statement);
+use Scalar::Util qw(refaddr);
 use parent 'Perl::Critic::Policy';
 
 sub default_themes       { return qw( maintenance )     }
@@ -16,6 +17,7 @@ sub violates {
 
     my %defined_constants;
     my %used;
+    my %constant_definitions;
 
     my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') }) || [];
     for my $st (@$include_statements) {
@@ -23,16 +25,13 @@ sub violates {
         my @constants = get_constant_name_elements_from_declaring_statement( $st );
         for my $tok (@constants) {
             push @{ $defined_constants{"$tok"} }, $tok;
+            $constant_definitions{ refaddr($tok) } = refaddr($st);
         }
     }
 
     for my $el_word (@{ $elem->find( sub { $_[1]->isa('PPI::Token::Word') }) ||[]}) {
-        my $st = $el_word;
-        while ($st) {
-            last if ($st->isa('PPI::Statement::Include'));
-            $st = $st->parent;
-        }
-        next if $st;
+        my $st = $el_word->statement;
+        next if $constant_definitions{refaddr($el_word)} && $constant_definitions{refaddr($el_word)} == refaddr($st);
         $used{"$el_word"}++;
     }
 
