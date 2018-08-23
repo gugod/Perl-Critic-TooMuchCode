@@ -17,22 +17,25 @@ sub violates {
 
     my %defined_constants;
     my %used;
-    my %constant_definitions;
 
     my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') }) || [];
     for my $st (@$include_statements) {
         next unless $st->schild(0) eq 'use' && $st->module eq 'constant';
         my @constants = get_constant_name_elements_from_declaring_statement( $st );
         for my $tok (@constants) {
-            push @{ $defined_constants{"$tok"} }, $tok;
-            $constant_definitions{ refaddr($tok) } = refaddr($st);
+            push @{ $defined_constants{"$tok"} }, $st;
         }
     }
 
     for my $el_word (@{ $elem->find( sub { $_[1]->isa('PPI::Token::Word') }) ||[]}) {
         my $st = $el_word->statement;
-        next if $constant_definitions{refaddr($el_word)} && $constant_definitions{refaddr($el_word)} == refaddr($st);
-        $used{"$el_word"}++;
+        if ($defined_constants{"$el_word"}) {
+            for my $st (@{ $defined_constants{"$el_word"} }) {
+                unless ($el_word->descendant_of($st)) {
+                    $used{"$el_word"}++;
+                }
+            }
+        }
     }
 
     my @violations;
