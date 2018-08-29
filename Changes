@@ -1,3 +1,7 @@
+0.06
+        - Release at 2018-08-29T23:13:58+0900
+        - ProhibitUnusedImport: fix a case when it failed to extract the tokens in `qw()`
+
 0.05
         - ProhibitUnusedImport: ignore Getopt::Long for it has special argument spec.
         - ProhibitUnusedConstant: avoid a case of false positive.
