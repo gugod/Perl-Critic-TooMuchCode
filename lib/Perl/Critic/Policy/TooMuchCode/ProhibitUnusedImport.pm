@@ -36,14 +36,7 @@ sub gather_violations_generic {
 
         if (@$expr_qw == 1) {
             my $expr = $expr_qw->[0];
-
-            my $expr_str = "$expr";
-
-            # Given that both PPI and PPR parse this correctly, I don't care about what are the characters used for quoting. We can remove the characters at the position that are supposed to be quoting characters.
-            substr($expr_str, 0, 3) = '';
-            substr($expr_str, -1, 1) = '';
-
-            my @words = split /\s+/, $expr_str;
+            my @words = $expr_qw->[0]->literal;
             for my $w (@words) {
                 next if $w =~ /\A [:\-]/x;
                 push @{ $imported{$w} //=[] }, $included_module;
