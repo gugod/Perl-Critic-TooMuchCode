@@ -1,5 +1,13 @@
 version: 2
 jobs:
+  criticism:
+    docker:
+      - image: gugod/perlcritic:latest
+    steps:
+      - checkout
+      - run:
+          name: perlcritic
+          command: perlcritic --profile .perlcriticrc .
   build:
     docker:
       - image: perl:5.28
