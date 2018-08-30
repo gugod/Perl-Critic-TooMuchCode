@@ -5,7 +5,8 @@ use warnings;
 use Perl::Critic::Utils;
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '0.01';
+# Part of Perl-Critic distribution
+use Perl::Critic::Policy::Variables::ProhibitUnusedVariables;
 
 sub default_themes       { return qw( maintenance )     }
 sub applies_to           { return 'PPI::Document' }
@@ -49,7 +50,10 @@ sub gather_violations_generic {
         $used{"$el_word"}++;
     }
 
-    my @violations;
+    Perl::Critic::Policy::Variables::ProhibitUnusedVariables::_get_symbol_usage(\%used, $doc);
+    Perl::Critic::Policy::Variables::ProhibitUnusedVariables::_get_regexp_symbol_usage(\%used, $doc);
+
+   my @violations;
     my @to_report = grep { !$used{$_} } (sort keys %imported);
     for my $tok (@to_report) {
         for my $inc_mod (@{ $imported{$tok} }) {

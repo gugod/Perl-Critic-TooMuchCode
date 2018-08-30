@@ -25,3 +25,10 @@ print 42;
 
 use Encode       qw( decode );
 my $val = decode ("utf-16be", $val);
+
+## name Bin
+## failures 0
+## cut
+
+use FindBin qw( $RealBin );
+my $prog = $RealBin . "/../foo.pl";
