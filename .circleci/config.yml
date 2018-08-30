@@ -10,7 +10,7 @@ jobs:
           command: perl -V
       - run:
           name: Prepare
-          command: cpanm --notest Test2::Harness
+          command: cpanm --notest Test2::Harness; cpanm --notest --installdeps .
       - run:
           name: Test
           command: yath
