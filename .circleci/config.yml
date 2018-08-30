@@ -5,20 +5,18 @@ jobs:
       - image: gugod/perlcritic:latest
     steps:
       - checkout
-      - run:
-          name: perlcritic
-          command: perlcritic --profile .perlcriticrc .
-  build:
+      - run: perlcritic --profile .perlcriticrc .
+  test:
     docker:
       - image: perl:5.28
     steps:
       - checkout
-      - run:
-          name: Greeting
-          command: perl -V
-      - run:
-          name: Prepare
-          command: cpanm --notest Test2::Harness; cpanm --notest --installdeps .
-      - run:
-          name: Test
-          command: yath
+      - run: perl -V
+      - run: cpanm --notest Test2::Harness; cpanm --notest --installdeps .
+      - run: yath
+workflows:
+  version: 2
+  test_and_critic:
+    jobs:
+      - criticism
+      - test
