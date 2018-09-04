@@ -45,9 +45,9 @@ sub gather_uses_generic {
     for my $word (@words) {
         for my $inc (@$includes) {
             my $mod = $inc->module;
-            if ($word->content =~ /\A $mod (\z|::)/x) {
-                $uses->{ refaddr($inc) } = 1;
-            }
+            my $r   = refaddr($inc);
+            next if $uses->{$r};
+            $uses->{$r} = 1 if $word->content =~ /\A $mod (\z|::)/x;
         }
     }
 }
@@ -77,18 +77,14 @@ sub gather_uses_objective {
     my %is_objective = map { ($_ => 1) } qw(HTTP::Tiny HTTP::Lite LWP::UserAgent File::Spec);
     for my $inc (@$includes) {
         my $mod = $inc->module;
-        next unless $is_objective{ $mod };
-
-        my $is_used = $doc->find(
+        next unless $is_objective{$mod} && $doc->find(
             sub {
                 my $el = $_[1];
                 $el->isa('PPI::Token::Word') && $el->content eq $mod && !($el->parent->isa('PPI::Statement::Include'))
             }
         );
 
-        if ($is_used) {
-            $uses->{ refaddr($inc) } = 1;
-        }
+        $uses->{ refaddr($inc) } = 1;
     }
 }
 
