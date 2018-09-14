@@ -39,7 +39,7 @@ sub gather_violations_generic {
             my $expr = $expr_qw->[0];
             my @words = $expr_qw->[0]->literal;
             for my $w (@words) {
-                next if $w =~ /\A [:\-]/x;
+                next if $w =~ /\A [:\-\+]/x;
                 push @{ $imported{$w} //=[] }, $included_module;
             }
         }
