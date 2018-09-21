@@ -27,13 +27,13 @@ sub gather_violations_generic {
 
     my %imported;
 
-    my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') }) || [];
+    my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') && !$_[1]->pragma }) || [];
     for my $st (@$include_statements) {
         next if $st->schild(0) eq 'no';
         my $expr_qw = $st->find( sub { $_[1]->isa('PPI::Token::QuoteLike::Words'); }) or next;
 
         my $included_module = $st->schild(1);
-        next if $included_module =~ /\A[a-z:]*\z/ || $is_special{$included_module};
+        next if $is_special{$included_module};
 
         if (@$expr_qw == 1) {
             my $expr = $expr_qw->[0];
