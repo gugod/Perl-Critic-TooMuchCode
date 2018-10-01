@@ -112,3 +112,11 @@ use self;
 sub fnord {
     print $self->darf;
 }
+
+## name Generic: with imported symbols.
+## failures 0
+## cut
+
+use Foo qw(bar);
+my $a = 42;
+bar($a);

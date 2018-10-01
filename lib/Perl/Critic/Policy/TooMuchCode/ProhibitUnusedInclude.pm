@@ -41,9 +41,18 @@ sub gather_uses_generic {
     my @words = grep { ! $_->statement->isa('PPI::Statement::Include') } @{ $doc->find('PPI::Token::Word') || []};
     my @mods = map { $_->module } @$includes;
 
-    my %used;
+    my @inc_without_args;
+    for my $inc (@$includes) {
+        if ($inc->arguments) {
+            my $r = refaddr($inc);
+            $uses->{$r} = -1;
+        } else {
+            push @inc_without_args, $inc;
+        }
+    }
+
     for my $word (@words) {
-        for my $inc (@$includes) {
+        for my $inc (@inc_without_args) {
             my $mod = $inc->module;
             my $r   = refaddr($inc);
             next if $uses->{$r};
