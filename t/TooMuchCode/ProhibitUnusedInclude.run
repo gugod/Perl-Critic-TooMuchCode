@@ -1,3 +1,10 @@
+## name perl version
+## failures 0
+## cut
+
+use v5.18;
+print 42;
+
 ## name File::Spec
 ## failures 1
 ## cut

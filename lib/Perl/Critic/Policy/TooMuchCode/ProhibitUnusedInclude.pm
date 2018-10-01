@@ -15,7 +15,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     my @includes = grep {
-        !$_->pragma && $_->module !~ /\A Mo([ou](?:se)?)? (\z|::)/x
+        !$_->pragma && $_->module && $_->module !~ /\A Mo([ou](?:se)?)? (\z|::)/x
     } @{ $doc->find('PPI::Statement::Include') ||[] };
     return () unless @includes;
 
