@@ -57,7 +57,7 @@ sub gather_violations_generic {
     my @to_report = grep { !$used{$_} } (sort keys %imported);
     for my $tok (@to_report) {
         for my $inc_mod (@{ $imported{$tok} }) {
-            push @violations, $self->violation( 'Unused import', "A token <$tok> is imported but not used in the same code.", $inc_mod );
+            push @violations, $self->violation( "Unused import: $tok", "A token is imported but not used in the same code.", $inc_mod );
         }
     }
 
