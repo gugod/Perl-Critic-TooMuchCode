@@ -11,6 +11,33 @@ sub applies_to           { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
 
+
+## This mapping fines a set of modules with behaviour that introduce
+## new words as subroutine names or method names when they are `use`ed
+## without argumnets.
+
+use constant IMPORT_IMPLICIT => {
+    'Data::Dumper'   => ['Dumper'],
+    'Encode'         => [qw(decode  decode_utf8  encode  encode_utf8 str2bytes bytes2str encodings  find_encoding clone_encoding)],
+    'File::Which'    => ['which'],
+    'HTTP::Date'     => [qw(time2str str2time)],
+    'JSON::PP'       => [qw(encode_json decode_Json)],
+    'JSON::XS'       => [qw(encode_json decode_json)],
+    'MIME::Base64'   => [qw(encode_base64 decode_base64)],
+    'Module::Spy'    => ['spy_on'],
+    'Path::Tiny'     => ['path'],
+    'Plack::Builder' => [qw(builder mount)],
+    'Smart::Args'    => [qw(args args_pos)],
+    'Test::More'     => [qw(ok use_ok require_ok is isnt like unlike is_deeply cmp_ok skip todo todo_skip pass fail eq_array eq_hash eq_set $TODO plan done_testing can_ok isa_ok new_ok diag note explain subtest BAIL_OUT)],
+    'Test::Time'     => [qw(time sleep)],
+    'Time::Piece'    => [qw(localtime gmtime)],
+    'Time::Seconds'  => [qw(ONE_MINUTE ONE_HOUR ONE_DAY ONE_WEEK ONE_MONTH ONE_YEAR ONE_FINANCIAL_MONTH LEAP_YEAR NON_LEAP_YEAR)],
+    'Try::Tiny'      => [qw(try catch finally)],
+    'URI::Escape'    => [qw(uri_escape uri_unescape uri_escape_utf8)],
+    'URI::QueryParam' => [qw(query_param)],
+    'Test::Exception' => [qw(dies_ok lives_ok throws_ok lives_and)],
+};
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
@@ -57,6 +84,7 @@ sub gather_uses_generic {
             my $r   = refaddr($inc);
             next if $uses->{$r};
             $uses->{$r} = 1 if $word->content =~ /\A $mod (\z|::)/x;
+            $uses->{$r} = 1 if grep { $_ eq $word } @{IMPORT_IMPLICIT->{$mod} ||[]};
         }
     }
 }
