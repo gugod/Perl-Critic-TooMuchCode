@@ -9,10 +9,20 @@ use parent 'Perl::Critic::Policy';
 sub default_themes       { return qw( maintenance )     }
 sub applies_to           { return 'PPI::Document' }
 
+sub supported_parameters {
+    return (
+        +{
+            name => 'ignore',
+            description => 'List of modules to be disregarded. Separated by whitespaces.',
+            behavior => 'string list',
+        }
+    )
+}
+
 #---------------------------------------------------------------------------
 
 
-## This mapping fines a set of modules with behaviour that introduce
+## this mapping fines a set of modules with behaviour that introduce
 ## new words as subroutine names or method names when they are `use`ed
 ## without argumnets.
 
@@ -32,7 +42,9 @@ use constant IMPORT_IMPLICIT => {
     'Plack::Builder'  => [qw(builder mount)],
     'Plack::Test'     => ['test_psgi'],
     'Smart::Args'     => [qw(args args_pos)],
+    'Test2::V0'       => [qw(ok pass fail diag note todo skip plan skip_all done_testing bail_out intercept context gen_event def do_def cmp_ok warns warning warnings no_warnings subtest can_ok isa_ok DOES_ok set_encoding imported_ok not_imported_ok ref_ok ref_is ref_is_not mock mocked dies lives try_ok is like isnt unlike match mismatch validator hash array bag object meta meta_check number float rounded within string subset bool in_set not_in_set check_set item field call call_list call_hash prop check all_items all_keys all_vals all_values etc end filter_items T F D DF E DNE FDNE U event fail_events exact_ref)],
     'Test::Exception' => [qw(dies_ok lives_ok throws_ok lives_and)],
+    'Test::Kantan'    => [qw(Feature Scenario Given When Then subtest done_testing setup teardown describe context it before_each after_each expect ok diag ignore spy_on skip_all)],
     'Test::More'      => [qw(ok use_ok require_ok is isnt like unlike is_deeply cmp_ok skip todo todo_skip pass fail eq_array eq_hash eq_set $TODO plan done_testing can_ok isa_ok new_ok diag note explain subtest BAIL_OUT)],
     'Test::Time'      => [qw(time sleep)],
     'Time::Piece'     => [qw(localtime gmtime)],
@@ -46,8 +58,11 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     my @includes = grep {
-        !$_->pragma && $_->module && $_->module !~ /\A Mo([ou](?:se)?)? (\z|::)/x
+        !$_->pragma && $_->module && $_->module !~ /\A Mo([ou](?:se)?)? (\z|::)/x && (! $self->{_ignore}{$_->module})
     } @{ $doc->find('PPI::Statement::Include') ||[] };
+
+    # print STDERR Data::Dumper::Dumper({ ignore => $self->{_ignore}, inc_mod => \@includes });
+
     return () unless @includes;
 
     my %uses;
@@ -70,7 +85,7 @@ sub gather_uses_generic {
     my ( $self, $includes, $doc, $uses ) = @_;
 
     my @words = grep { ! $_->statement->isa('PPI::Statement::Include') } @{ $doc->find('PPI::Token::Word') || []};
-    my @mods = map { $_->module } @$includes;
+    my @mods = grep { !$uses->{$_} } map { $_->module } @$includes;
 
     my @inc_without_args;
     for my $inc (@$includes) {
