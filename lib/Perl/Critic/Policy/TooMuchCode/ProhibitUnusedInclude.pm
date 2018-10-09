@@ -107,6 +107,7 @@ use constant DEFAULT_EXPORT => {
     'Test::Kantan'                 => [qw(Feature Scenario Given When Then subtest done_testing setup teardown describe context it before_each after_each expect ok diag ignore spy_on skip_all)],
     'Test::LongString'             => [qw(is_string is_string_nows like_string unlike_string contains_string lacks_string)],
     'Test::Mock::Guard'            => [qw(mock_guard)],
+    'Test::More'                   => [qw(ok use_ok require_ok is isnt like unlike is_deeply cmp_ok skip todo todo_skip pass fail eq_array eq_hash eq_set plan done_testing can_ok isa_ok new_ok diag note explain subtest BAIL_OUT)],
     'Test::Object'                 => [qw(object_ok)],
     'Test::Output'                 => [qw(output_like stderr_from output_isnt stderr_is stdout_unlike combined_isnt output_is combined_is stdout_is stderr_isnt stdout_like combined_unlike stderr_unlike output_from combined_from stdout_isnt output_unlike combined_like stdout_from stderr_like)],
     'Test::Simple'                 => [qw(ok)],
