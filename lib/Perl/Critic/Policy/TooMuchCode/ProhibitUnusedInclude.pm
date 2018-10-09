@@ -26,7 +26,7 @@ sub supported_parameters {
 ## new words as subroutine names or method names when they are `use`ed
 ## without argumnets.
 
-# for mod in $(perlbrew list-modules); do perl -M${mod} -l -e 'if (my @e = grep /\A\w+\z/, (@'$mod'::EXPORT) ) { print "### \x27'$mod'\x27 => [qw(@e)],"; }' \;  2>/dev/null | grep '^### ' | cut -c 5- ; done
+# for mod in $(perlbrew list-modules) Test2::V0; do perl -M${mod} -l -e 'if (my @e = grep /\A\w+\z/, (@'$mod'::EXPORT) ) { print "### \x27'$mod'\x27 => [qw(@e)],"; }' \;  2>/dev/null | grep '^### ' | cut -c 5- ; done
 use constant DEFAULT_EXPORT => {
     'App::ModuleBuildTiny'         => [qw(modulebuildtiny)],
     'B::Hooks::EndOfScope'         => [qw(on_scope_end)],
@@ -114,6 +114,7 @@ use constant DEFAULT_EXPORT => {
     'Test::SubCalls'               => [qw(sub_track sub_calls sub_reset sub_reset_all)],
     'Test::TCP'                    => [qw(empty_port test_tcp wait_port)],
     'Test::Warn'                   => [qw(warning_is warnings_are warning_like warnings_like warnings_exist)],
+    'Test2::V0'                    => [qw(ok pass fail diag note todo skip plan skip_all done_testing bail_out intercept context gen_event def do_def cmp_ok warns warning warnings no_warnings subtest can_ok isa_ok DOES_ok set_encoding imported_ok not_imported_ok ref_ok ref_is ref_is_not mock mocked dies lives try_ok is like isnt unlike match mismatch validator hash array bag object meta meta_check number float rounded within string subset bool in_set not_in_set check_set item field call call_list call_hash prop check all_items all_keys all_vals all_values etc end filter_items T F D DF E DNE FDNE U event fail_events exact_ref)],
     'Text::Diff'                   => [qw(diff)],
     'Time::Piece'                  => [qw(localtime gmtime)],
     'Try::Tiny'                    => [qw(try catch finally)],
