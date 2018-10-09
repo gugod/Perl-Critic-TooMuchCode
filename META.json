@@ -1,0 +1,83 @@
+{
+   "abstract" : "perlcritic add-ons that generally check for un-needed stuffs.",
+   "author" : [
+      "Kang-min Liu <gugod@gugod.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "App::ModuleBuildTiny version 0.023",
+   "license" : [
+      "mit"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : 2
+   },
+   "name" : "Perl-Critic-TooMuchCode",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "Module::Build::Tiny" : "0.034"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "App::ModuleBuildTiny" : "0.023"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "List::Util" : "1.50",
+            "PPIx::Utils" : "0.002",
+            "Perl::Critic" : "0",
+            "Scalar::Util" : "1.50"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test2::V0" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "Perl::Critic::Policy::TooMuchCode::ProhibitExcessiveColons" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitExcessiveColons.pm",
+         "version" : "0.01"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitLargeBlock" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitLargeBlock.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitLargeTryBlock" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitLargeTryBlock.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitUnnecessaryScalarKeyword" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnnecessaryScalarKeyword.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitUnnecessaryUTF8Pragma" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnnecessaryUTF8Pragma.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitUnusedConstant" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnusedConstant.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitUnusedImport" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnusedImport.pm"
+      },
+      "Perl::Critic::Policy::TooMuchCode::ProhibitUnusedInclude" : {
+         "file" : "lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnusedInclude.pm"
+      },
+      "Perl::Critic::TooMuchCode" : {
+         "file" : "lib/Perl/Critic/TooMuchCode.pm",
+         "version" : "0.08"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/gugod/Perl-Critic-TooMuchCode.git",
+         "web" : "https://github.com/gugod/Perl-Critic-TooMuchCode"
+      }
+   },
+   "version" : "0.08",
+   "x_serialization_backend" : "JSON::PP version 2.97001",
+   "x_static_install" : "1"
+}
