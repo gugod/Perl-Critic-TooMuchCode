@@ -26,7 +26,7 @@ sub supported_parameters {
 ## new words as subroutine names or method names when they are `use`ed
 ## without argumnets.
 
-# perlbrew list-modules | xargs -n1 -I{} -- perl -M{} -l -e 'if (my @e = grep /\A\w+\z/, (@{}::EXPORT) ) { print "### \x27{}\x27 => [qw(@e)],"; }' \;  2>/dev/null | grep '^### ' | cut -c 5-
+# for mod in $(perlbrew list-modules); do perl -M${mod} -l -e 'if (my @e = grep /\A\w+\z/, (@'$mod'::EXPORT) ) { print "### \x27'$mod'\x27 => [qw(@e)],"; }' \;  2>/dev/null | grep '^### ' | cut -c 5- ; done
 use constant DEFAULT_EXPORT => {
     'B::Hooks::EndOfScope'         => [qw(on_scope_end)],
     'Carp::Assert'                 => [qw(assert affirm should shouldnt DEBUG assert affirm should shouldnt DEBUG)],
@@ -45,7 +45,7 @@ use constant DEFAULT_EXPORT => {
     'Data::NestedParams'           => [qw(expand_nested_params collapse_nested_params)],
     'Data::UUID'                   => [qw(NameSpace_DNS NameSpace_OID NameSpace_URL NameSpace_X500)],
     'Data::Validate::Domain'       => [qw(is_domain is_hostname is_domain_label)],
-    'Data::Validate::IP'           => [qw(is_ip is_ipv4 is_ipv6 is_innet_ipv4 is_unroutable_ipv4 is_testnet_ipv4 is_multicast_ipv4 is_linklocal_ipv4 is_private_ipv4 is_loopback_ipv4 is_anycast_ipv4 is_public_ipv4 is_loopback_ipv6 is_linklocal_ipv6 is_private_ipv6 is_documentation_ipv6 is_orchid_ipv6 is_discard_ipv6 is_multicast_ipv6 is_teredo_ipv6 is_special_ipv6 is_ipv4_mapped_ipv6 is_public_ipv6 is_linklocal_ip is_loopback_ip is_multicast_ip is_private_ip is_public_ip)],
+    'Data::Validate::IP'           => [qw(is_ip is_ipv4 is_ipv6 is_innet_ipv4 is_private_ipv4 is_unroutable_ipv4 is_anycast_ipv4 is_multicast_ipv4 is_testnet_ipv4 is_loopback_ipv4 is_linklocal_ipv4 is_public_ipv4 is_ipv4_mapped_ipv6 is_discard_ipv6 is_multicast_ipv6 is_loopback_ipv6 is_special_ipv6 is_private_ipv6 is_documentation_ipv6 is_orchid_ipv6 is_linklocal_ipv6 is_teredo_ipv6 is_public_ipv6 is_linklocal_ip is_loopback_ip is_multicast_ip is_private_ip is_public_ip)],
     'Data::Walk'                   => [qw(walk walkdepth)],
     'Devel::CheckCompiler'         => [qw(check_c99 check_c99_or_exit check_compile)],
     'Devel::CheckLib'              => [qw(assert_lib check_lib_or_exit check_lib)],
@@ -84,6 +84,45 @@ use constant DEFAULT_EXPORT => {
     'Module::Find'                 => [qw(findsubmod findallmod usesub useall setmoduledirs)],
     'Module::Functions'            => [qw(get_public_functions)],
     'Module::Spy'                  => [qw(spy_on)],
+    'PLON'                         => [qw(encode_plon decode_pson)],
+    'Path::Class'                  => [qw(file dir)],
+    'Path::Tiny'                   => [qw(path)],
+    'Proc::Wait3'                  => [qw(wait3)],
+    'Readonly'                     => [qw(Readonly)],
+    'SQL::QueryMaker'              => [qw(sql_op sql_raw sql_and sql_or sql_in sql_not_in sql_is_not_null sql_ne sql_ge sql_gt sql_eq sql_like sql_le sql_not sql_not_between sql_is_null sql_between sql_lt)],
+    'Smart::Args'                  => [qw(args args_pos)],
+    'Socket'                       => [qw(PF_802 PF_AAL PF_APPLETALK PF_CCITT PF_CHAOS PF_CTF PF_DATAKIT PF_DECnet PF_DLI PF_ECMA PF_GOSIP PF_HYLINK PF_IMPLINK PF_INET PF_INET6 PF_ISO PF_KEY PF_LAST PF_LAT PF_LINK PF_MAX PF_NBS PF_NIT PF_NS PF_OSI PF_OSINET PF_PUP PF_ROUTE PF_SNA PF_UNIX PF_UNSPEC PF_USER PF_WAN PF_X25 AF_802 AF_AAL AF_APPLETALK AF_CCITT AF_CHAOS AF_CTF AF_DATAKIT AF_DECnet AF_DLI AF_ECMA AF_GOSIP AF_HYLINK AF_IMPLINK AF_INET AF_INET6 AF_ISO AF_KEY AF_LAST AF_LAT AF_LINK AF_MAX AF_NBS AF_NIT AF_NS AF_OSI AF_OSINET AF_PUP AF_ROUTE AF_SNA AF_UNIX AF_UNSPEC AF_USER AF_WAN AF_X25 SOCK_DGRAM SOCK_RAW SOCK_RDM SOCK_SEQPACKET SOCK_STREAM SOL_SOCKET SO_ACCEPTCONN SO_ATTACH_FILTER SO_BACKLOG SO_BROADCAST SO_CHAMELEON SO_DEBUG SO_DETACH_FILTER SO_DGRAM_ERRIND SO_DOMAIN SO_DONTLINGER SO_DONTROUTE SO_ERROR SO_FAMILY SO_KEEPALIVE SO_LINGER SO_OOBINLINE SO_PASSCRED SO_PASSIFNAME SO_PEERCRED SO_PROTOCOL SO_PROTOTYPE SO_RCVBUF SO_RCVLOWAT SO_RCVTIMEO SO_REUSEADDR SO_REUSEPORT SO_SECURITY_AUTHENTICATION SO_SECURITY_ENCRYPTION_NETWORK SO_SECURITY_ENCRYPTION_TRANSPORT SO_SNDBUF SO_SNDLOWAT SO_SNDTIMEO SO_STATE SO_TYPE SO_USELOOPBACK SO_XOPEN SO_XSE IP_HDRINCL IP_OPTIONS IP_RECVOPTS IP_RECVRETOPTS IP_RETOPTS IP_TOS IP_TTL MSG_BCAST MSG_BTAG MSG_CTLFLAGS MSG_CTLIGNORE MSG_CTRUNC MSG_DONTROUTE MSG_DONTWAIT MSG_EOF MSG_EOR MSG_ERRQUEUE MSG_ETAG MSG_FASTOPEN MSG_FIN MSG_MAXIOVLEN MSG_MCAST MSG_NOSIGNAL MSG_OOB MSG_PEEK MSG_PROXY MSG_RST MSG_SYN MSG_TRUNC MSG_URG MSG_WAITALL MSG_WIRE SHUT_RD SHUT_RDWR SHUT_WR INADDR_ANY INADDR_BROADCAST INADDR_LOOPBACK INADDR_NONE SCM_CONNECT SCM_CREDENTIALS SCM_CREDS SCM_RIGHTS SCM_TIMESTAMP SOMAXCONN IOV_MAX UIO_MAXIOV sockaddr_family pack_sockaddr_in unpack_sockaddr_in sockaddr_in pack_sockaddr_in6 unpack_sockaddr_in6 sockaddr_in6 pack_sockaddr_un unpack_sockaddr_un sockaddr_un inet_aton inet_ntoa)],
+    'String::Format'               => [qw(stringf)],
+    'String::ShellQuote'           => [qw(shell_quote shell_quote_best_effort shell_comment_quote)],
+    'Sub::Name'                    => [qw(subname)],
+    'Sub::Quote'                   => [qw(quote_sub unquote_sub quoted_from_sub qsub)],
+    'Sub::Retry'                   => [qw(retry)],
+    'Teng::Plugin::TextTable'      => [qw(draw_text_table)],
+    'Test::BinaryData'             => [qw(is_binary)],
+    'Test::Deep'                   => [qw(Isa blessed obj_isa all any array array_each arrayelementsonly arraylength arraylengthonly bag bool cmp_bag cmp_deeply cmp_methods cmp_set code eq_deeply hash hash_each hashkeys hashkeysonly ignore isa listmethods methods noclass none noneof num re reftype regexpmatches regexponly regexpref regexprefonly scalarrefonly scalref set shallow str subbagof subhashof subsetof superbagof superhashof supersetof useclass)],
+    'Test::Differences'            => [qw(eq_or_diff eq_or_diff_text eq_or_diff_data unified_diff context_diff oldstyle_diff table_diff)],
+    'Test::Exception'              => [qw(dies_ok lives_ok throws_ok lives_and)],
+    'Test::Fatal'                  => [qw(exception)],
+    'Test::Kantan'                 => [qw(Feature Scenario Given When Then subtest done_testing setup teardown describe context it before_each after_each expect ok diag ignore spy_on skip_all)],
+    'Test::LongString'             => [qw(is_string is_string_nows like_string unlike_string contains_string lacks_string)],
+    'Test::Mock::Guard'            => [qw(mock_guard)],
+    'Test::Object'                 => [qw(object_ok)],
+    'Test::Output'                 => [qw(output_isnt stderr_isnt stdout_from stdout_unlike combined_like combined_isnt combined_is stderr_is stderr_unlike stderr_from stdout_is combined_unlike combined_from output_is output_unlike output_like output_from stdout_isnt stderr_like stdout_like)],
+    'Test::Simple'                 => [qw(ok)],
+    'Test::Stub'                   => [qw(stub make_stub)],
+    'Test::SubCalls'               => [qw(sub_track sub_calls sub_reset sub_reset_all)],
+    'Test::TCP'                    => [qw(empty_port test_tcp wait_port)],
+    'Test::Warn'                   => [qw(warning_is warnings_are warning_like warnings_like warnings_exist)],
+    'Text::Diff'                   => [qw(diff)],
+    'Time::Piece'                  => [qw(localtime gmtime)],
+    'Try::Tiny'                    => [qw(try catch finally)],
+    'URI::Find'                    => [qw(find_uris)],
+    'URL::Builder'                 => [qw(build_url build_url_utf8)],
+    'UUID::Tiny'                   => [qw(UUID_NIL UUID_NS_DNS UUID_NS_URL UUID_NS_OID UUID_NS_X500 UUID_V1 UUID_V3 UUID_V4 UUID_V5 UUID_SHA1_AVAIL create_UUID create_UUID_as_string is_UUID_string UUID_to_string string_to_UUID version_of_UUID time_of_UUID clk_seq_of_UUID equal_UUIDs)],
+    'Unicode::EastAsianWidth'      => [qw(InEastAsianAmbiguous InEastAsianFullwidth InEastAsianHalfwidth InEastAsianNarrow InEastAsianNeutral InEastAsianWide InFullwidth InHalfwidth)],
+    'Want'                         => [qw(want rreturn lnoreturn)],
+    'XML::Simple'                  => [qw(XMLin XMLout)],
+    'YAML'                         => [qw(Dump Load)],
 };
 
 sub violates {
