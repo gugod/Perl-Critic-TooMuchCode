@@ -143,7 +143,6 @@ sub violates {
 
     my %uses;
     $self->gather_uses_try_family(\@includes, $doc, \%uses);
-    $self->gather_uses_objective(\@includes, $doc, \%uses);
     $self->gather_uses_generic(\@includes, $doc, \%uses);
 
     return map {
@@ -178,8 +177,7 @@ sub gather_uses_generic {
             my $mod = $inc->module;
             my $r   = refaddr($inc);
             next if $uses->{$r};
-            $uses->{$r} = 1 if $word->content =~ /\A $mod (\z|::)/x;
-            $uses->{$r} = 1 if grep { $_ eq $word } @{DEFAULT_EXPORT->{$mod} ||[]};
+            $uses->{$r} = 1 if ($word->content =~ /\A $mod (\z|::)/x) || (grep { $_ eq $word } @{DEFAULT_EXPORT->{$mod} ||[]}) || ("$word" eq "$inc");
         }
     }
 }
@@ -201,23 +199,6 @@ sub gather_uses_try_family {
     return unless $has_try_block;
 
     $uses->{refaddr($_)} = 1 for @uses_tryish_modules;
-}
-
-sub gather_uses_objective {
-    my ( $self, $includes, $doc, $uses ) = @_;
-
-    my %is_objective = map { ($_ => 1) } qw(HTTP::Tiny HTTP::Lite LWP::UserAgent File::Spec);
-    for my $inc (@$includes) {
-        my $mod = $inc->module;
-        next unless $is_objective{$mod} && $doc->find(
-            sub {
-                my $el = $_[1];
-                $el->isa('PPI::Token::Word') && $el->content eq $mod && !($el->parent->isa('PPI::Statement::Include'))
-            }
-        );
-
-        $uses->{ refaddr($inc) } = 1;
-    }
 }
 
 1;
