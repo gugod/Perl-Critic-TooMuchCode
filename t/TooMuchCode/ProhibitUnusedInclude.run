@@ -120,3 +120,10 @@ sub fnord {
 use Foo qw(bar);
 my $a = 42;
 bar($a);
+
+## name Pragmatism
+## failures 0
+## cut
+
+use Test::NoWarnings;
+print 42;
