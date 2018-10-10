@@ -52,23 +52,21 @@ use File::Spec;
 print File::Spec->catfile("answer" => 42);
 
 ## name +Try::Lite
-## failures 2
+## failures 1
 ## cut
 
 use Try::Lite;
-use Something;
 print localtime();
 
-## name Generic: Foobar;
-## failures 2
+## name Generic: use Foobar -- but we do not know how to verify if it is used.
+## failures 0
 ## cut
 
 use Foobar;
-use Something;
-print localtime();
+print 42;
 
 ## name Generic: use Something objectively.
-## failures 1
+## failures 0
 ## cut
 
 use Foobar;
@@ -76,7 +74,7 @@ use Something;
 Something->process( localtime() );
 
 ## name Generic: use Something functionally.
-## failures 1
+## failures 0
 ## cut
 
 use Foobar;

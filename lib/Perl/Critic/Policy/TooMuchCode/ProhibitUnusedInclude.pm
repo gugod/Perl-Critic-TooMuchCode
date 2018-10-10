@@ -22,15 +22,6 @@ sub supported_parameters {
 #---------------------------------------------------------------------------
 
 use constant {
-    ## Ignore these ones before we can correctly criticize
-    IGNORE_FOR_NOW => {
-        map { $_ => 1 }
-        qw(
-              FindBin
-              Config
-        )
-    },
-
     ## Some modules works like pragmas -- their very existence in the code implies that they are used.
     PRAGMATIST => {
         map { $_ => 1 }
@@ -46,6 +37,12 @@ use constant {
     TRY_FAMILY => {
         map { $_ => 1 }
         qw(Try::Tiny Try::Catch Try::Lite TryCatch Try)
+    },
+
+    ## These are the modules that, when used, the module name itself appears in the code.
+    USE_BY_MODULE_NAME => {
+        map { $_ => 1 }
+        qw(Hijk HTTP::Tiny HTTP::Lite LWP::UserAgent File::Spec)
     },
 
     ## this mapping fines a set of modules with behaviour that introduce
@@ -162,7 +159,7 @@ sub violates {
 
     my @includes = grep {
         my $mod = $_->module;
-        !$_->pragma && $mod && (! $self->{_ignore}{$mod}) && (! IGNORE_FOR_NOW->{$mod})
+        !$_->pragma && $mod && (! $self->{_ignore}{$mod})
     } @{ $doc->find('PPI::Statement::Include') ||[] };
 
     return () unless @includes;
@@ -179,7 +176,8 @@ sub violates {
             $_
         )
     } grep {
-        ! $uses{refaddr($_)}
+        my $mod = $_->module;
+        (! $uses{refaddr($_)}) && (TRY_FAMILY->{$mod} || DEFAULT_EXPORT->{$mod} || USE_BY_MODULE_NAME->{$mod})
     } @includes;
 }
 
