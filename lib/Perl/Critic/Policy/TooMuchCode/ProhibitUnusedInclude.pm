@@ -22,6 +22,15 @@ sub supported_parameters {
 #---------------------------------------------------------------------------
 
 use constant {
+    ## Ignore these ones before we can correctly criticize
+    IGNORE_FOR_NOW => {
+        map { $_ => 1 }
+        qw(
+              FindBin
+              Config
+        )
+    },
+
     ## Some modules works like pragmas -- their very existence in the code implies that they are used.
     PRAGMATIST => {
         map { $_ => 1 }
@@ -147,10 +156,9 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     my @includes = grep {
-        !$_->pragma && $_->module && (! $self->{_ignore}{$_->module})
+        my $mod = $_->module;
+        !$_->pragma && $mod && (! $self->{_ignore}{$mod}) && (! IGNORE_FOR_NOW->{$mod})
     } @{ $doc->find('PPI::Statement::Include') ||[] };
-
-    # print STDERR Data::Dumper::Dumper({ ignore => $self->{_ignore}, inc_mod => \@includes });
 
     return () unless @includes;
 
