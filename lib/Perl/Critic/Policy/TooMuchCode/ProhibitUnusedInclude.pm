@@ -127,6 +127,7 @@ use constant {
         'Test::Spec'                   => [qw(runtests describe xdescribe context xcontext it xit they xthey before after around yield spec_helper share shared_examples_for it_should_behave_like)],
         'Test::Stub'                   => [qw(stub make_stub)],
         'Test::SubCalls'               => [qw(sub_track sub_calls sub_reset sub_reset_all)],
+        'Test::TempDir::Tiny'          => [qw(tempdir in_tempdir)],
         'Test::TCP'                    => [qw(empty_port test_tcp wait_port)],
         'Test::Warn'                   => [qw(warning_is warnings_are warning_like warnings_like warnings_exist)],
         'Text::Diff'                   => [qw(diff)],
