@@ -43,6 +43,11 @@ use constant {
         )
     },
 
+    TRY_FAMILY => {
+        map { $_ => 1 }
+        qw(Try::Tiny Try::Catch Try::Lite TryCatch Try)
+    },
+
     ## this mapping fines a set of modules with behaviour that introduce
     ## new words as subroutine names or method names when they are `use`ed
     ## without argumnets.
@@ -215,8 +220,7 @@ sub gather_uses_generic {
 sub gather_uses_try_family {
     my ( $self, $includes, $doc, $uses ) = @_;
 
-    my %is_try = map { $_ => 1 } qw(Try::Tiny Try::Catch Try::Lite TryCatch Try);
-    my @uses_tryish_modules = grep { $is_try{$_->module} } @$includes;
+    my @uses_tryish_modules = grep { TRY_FAMILY->{$_->module} } @$includes;
     return unless @uses_tryish_modules;
 
     my $has_try_block = 0;
