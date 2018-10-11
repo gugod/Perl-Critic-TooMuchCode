@@ -163,6 +163,8 @@ sub violates {
 
     return () unless @includes;
 
+    return () if grep { $_->module eq 'Module::Functions' } @includes;
+
     my %uses;
     $self->gather_uses_pragmatists(\@includes, $doc, \%uses);
     $self->gather_uses_try_family(\@includes, $doc, \%uses);
