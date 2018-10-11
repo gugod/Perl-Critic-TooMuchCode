@@ -147,7 +147,6 @@ use constant {
         'URI::Find'                    => [qw(find_uris)],
         'URL::Builder'                 => [qw(build_url build_url_utf8)],
         'UUID::Tiny'                   => [qw(UUID_NIL UUID_NS_DNS UUID_NS_URL UUID_NS_OID UUID_NS_X500 UUID_V1 UUID_V3 UUID_V4 UUID_V5 UUID_SHA1_AVAIL create_UUID create_UUID_as_string is_UUID_string UUID_to_string string_to_UUID version_of_UUID time_of_UUID clk_seq_of_UUID equal_UUIDs)],
-        'Unicode::EastAsianWidth'      => [qw(InEastAsianAmbiguous InEastAsianFullwidth InEastAsianHalfwidth InEastAsianNarrow InEastAsianNeutral InEastAsianWide InFullwidth InHalfwidth)],
         'Want'                         => [qw(want rreturn lnoreturn)],
         'XML::Simple'                  => [qw(XMLin XMLout)],
         'YAML'                         => [qw(Dump Load)],
