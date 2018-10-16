@@ -1,4 +1,5 @@
 0.08
+        - Released at 2018-10-16T09:05:01+0900
         - ProhibitUnusedImport: Ignore symbols with '+' prefix.
         - ProhibitUnusedInclude: now correctly detects a whole lot more modules.
 

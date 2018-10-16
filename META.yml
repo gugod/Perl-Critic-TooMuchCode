@@ -42,5 +42,5 @@ requires:
 resources:
   repository: https://github.com/gugod/Perl-Critic-TooMuchCode.git
 version: '0.08'
-x_serialization_backend: 'CPAN::Meta::YAML version 0.011'
+x_serialization_backend: 'CPAN::Meta::YAML version 0.018'
 x_static_install: '1'
