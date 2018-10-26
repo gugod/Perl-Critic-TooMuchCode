@@ -14,6 +14,8 @@ meta-spec:
   version: '1.4'
 name: Perl-Critic-TooMuchCode
 provides:
+  Perl::Critic::Policy::TooMuchCode::ProhibitDuplicateSub:
+    file: lib/Perl/Critic/Policy/TooMuchCode/ProhibitDuplicateSub.pm
   Perl::Critic::Policy::TooMuchCode::ProhibitExcessiveColons:
     file: lib/Perl/Critic/Policy/TooMuchCode/ProhibitExcessiveColons.pm
     version: '0.01'
