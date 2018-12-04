@@ -1,0 +1,9 @@
+pipeline:
+  perl5_28_0:
+    image: perl:5.28.0
+    commands:
+      - cpanm --notest --no-man-pages --installdeps .
+      - cpanm --notest --no-man-pages Test2::Harness
+      - yath --qvf
+
+
