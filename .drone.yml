@@ -13,5 +13,8 @@ steps:
     image: perl:5.28.0
     commands:
       - cpanm --notest --no-man-pages App::ModuleBuildTiny
+      - git clean -xdf
+      - ls -l
       - mbtiny dist
+      - ls -l
       - cpanm -v *.tar.gz
