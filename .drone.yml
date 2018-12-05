@@ -17,4 +17,4 @@ steps:
       - ls -l
       - mbtiny dist
       - ls -l
-      - cpanm -v *.tar.gz
+      - cpanm *.tar.gz
