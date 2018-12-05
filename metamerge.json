@@ -1,4 +1,5 @@
 {
+    "name": "Perl-Critic-TooMuchCode",
     "x_static_install": true,
     "resources": {
         "repository": {
