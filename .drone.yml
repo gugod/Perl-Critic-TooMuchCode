@@ -2,7 +2,7 @@ kind: pipeline
 name: default
 
 steps:
-  - name: Test with perl 5.28.0:
+  - name: Test with perl 5.28.0
     image: perl:5.28.0
     commands:
       - cpanm --notest --no-man-pages --installdeps .
@@ -16,4 +16,3 @@ steps:
       - cpanm --notest --no-man-pages App::ModuleBuildTiny
       - mbtiny dist
       - ls -l
-
