@@ -1,9 +1,19 @@
-pipeline:
-  perl5_28_0:
+kind: pipeline
+name: default
+
+steps:
+  - name: Test with perl 5.28.0:
     image: perl:5.28.0
     commands:
       - cpanm --notest --no-man-pages --installdeps .
       - cpanm --notest --no-man-pages Test2::Harness
       - yath --qvf
 
+  - name: Build Distribution
+    image: perl:5.28.0
+    commands:
+      - cpanm --notest --no-man-pages --installdeps .
+      - cpanm --notest --no-man-pages App::ModuleBuildTiny
+      - mbtiny dist
+      - ls -l
 
