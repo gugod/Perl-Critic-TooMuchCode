@@ -12,7 +12,6 @@ steps:
   - name: Build Distribution
     image: perl:5.28.0
     commands:
-      - cpanm --notest --no-man-pages --installdeps .
       - cpanm --notest --no-man-pages App::ModuleBuildTiny
       - mbtiny dist
-      - ls -l
+      - cpanm -v *.tar.gz
