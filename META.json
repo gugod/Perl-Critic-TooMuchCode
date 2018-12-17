@@ -77,7 +77,8 @@
       "repository" : {
          "type" : "git",
          "url" : "https://github.com/gugod/Perl-Critic-TooMuchCode.git",
-         "web" : "https://github.com/gugod/Perl-Critic-TooMuchCode"
+         "web" : "https://github.com/gugod/Perl-Critic-TooMuchCode",
+         "x_bugtracker" : "https://github.com/gugod/Perl-Critic-TooMuchCode/issues"
       }
    },
    "version" : "0.10",
