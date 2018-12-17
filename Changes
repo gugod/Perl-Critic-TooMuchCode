@@ -1,3 +1,5 @@
+        - ProhibitUnusedConstant: Workaround a PPI bug that misparses ternary op.
+
 0.10
         - Released at 2018-11-16T11:12:47+0900
         - ProhibitUnusedImport: Workaround a PPI bug that misparses ternary op.
