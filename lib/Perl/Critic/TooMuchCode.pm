@@ -25,9 +25,9 @@ Perl::Critic::TooMuchCode - perlcritic add-ons that generally check for dead cod
 
 =head1 DESCRIPTION
 
-This add-on of Perl::Critic is aiming for identifying trivial dead
+This add-on for L<Perl::Critic> is aiming for identifying trivial dead
 code. Either the ones that has no use, or the one that produce no
-effect. Having dead code floating around causes maintance burden. Some
+effect. Having dead code floating around causes maintenance burden. Some
 might prefer not to generate them in the first place.
 
 =head1 AUTHOR
