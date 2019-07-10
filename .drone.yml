@@ -2,15 +2,16 @@ kind: pipeline
 name: default
 
 steps:
-  - name: Test with perl 5.28.0
+  - name: Test
     image: perl:5.28.0
     commands:
       - cpanm -q --notest --no-man-pages --installdeps .
       - cpanm -q --notest --no-man-pages Test2::Harness
       - yath --qvf
 
-  - name: Build Distribution
+  - name: Build the dist
     image: perl:5.28.0
+    depends_on: Test
     commands:
       - cpanm -q --notest --no-man-pages App::ModuleBuildTiny
       - git clean -xdf
@@ -19,24 +20,32 @@ steps:
 
   - name: Install (perl 5.30)
     image: perl:5.30
+    depends_on:
+      - Build the dist
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
 
   - name: Install (perl 5.28)
     image: perl:5.28
+    depends_on:
+      - Build the dist
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
 
   - name: Install (perl 5.26)
     image: perl:5.26
+    depends_on:
+      - Build the dist
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
 
   - name: Install (perl 5.18)
     image: perl:5.18
+    depends_on:
+      - Build the dist
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
