@@ -14,10 +14,31 @@ steps:
     commands:
       - cpanm -q --notest --no-man-pages App::ModuleBuildTiny
       - git clean -xdf
-      - ls -l
       - mbtiny dist
-  - name: Install Distribution
-    image: perl:5.28.0
-    commands:
       - ls -l
+
+  - name: Install (perl 5.28)
+    image: perl:5.28
+    commands:
+      - echo *.tar.gz
       - cpanm -q *.tar.gz
+
+  - name: Install (perl 5.30)
+    image: perl:5.30
+    commands:
+      - echo *.tar.gz
+      - cpanm -q *.tar.gz
+
+  - name: Install (perl 5.26)
+    image: perl:5.26
+    commands:
+      - echo *.tar.gz
+      - cpanm -q *.tar.gz
+
+  - name: Install (perl 5.18)
+    image: perl:5.18
+    commands:
+      - echo *.tar.gz
+      - cpanm -q *.tar.gz
+
+
