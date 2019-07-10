@@ -17,14 +17,14 @@ steps:
       - mbtiny dist
       - ls -l
 
-  - name: Install (perl 5.28)
-    image: perl:5.28
+  - name: Install (perl 5.30)
+    image: perl:5.30
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
 
-  - name: Install (perl 5.30)
-    image: perl:5.30
+  - name: Install (perl 5.28)
+    image: perl:5.28
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
@@ -40,5 +40,3 @@ steps:
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
-
-
