@@ -11,7 +11,8 @@ steps:
 
   - name: Build the dist
     image: perl:5.28.0
-    depends_on: Test
+    depends_on:
+      - Test
     commands:
       - cpanm -q --notest --no-man-pages App::ModuleBuildTiny
       - git clean -xdf
