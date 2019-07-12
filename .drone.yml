@@ -2,19 +2,11 @@ kind: pipeline
 name: default
 
 steps:
-  - name: Test
-    image: perl:5.28.0
+  - name: Build
+    image: gugod/perl-testbox:5.28
     commands:
       - cpanm -q --notest --no-man-pages --installdeps .
-      - cpanm -q --notest --no-man-pages Test2::Harness
       - yath --qvf
-
-  - name: Build
-    image: perl:5.28.0
-    depends_on:
-      - Test
-    commands:
-      - cpanm -q --notest --no-man-pages App::ModuleBuildTiny
       - git clean -xdf
       - mbtiny dist
       - ls -l
@@ -40,6 +32,11 @@ steps:
   - << : *installation
     name: Install (centos, perl 5.26)
     image: centos/perl-526-centos7:latest
+    commands:
+      - curl -L https://cpanmin.us | perl - App::cpanminus
+      - echo *.tar.gz
+      - cpanm --notest -q *.tar.gz
+      - cpanm -q *.tar.gz
 
   - << : *installation
     name: Install (perl 5.24)
