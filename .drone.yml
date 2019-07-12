@@ -9,7 +9,7 @@ steps:
       - cpanm -q --notest --no-man-pages Test2::Harness
       - yath --qvf
 
-  - name: Build the dist
+  - name: Build
     image: perl:5.28.0
     depends_on:
       - Test
@@ -19,34 +19,39 @@ steps:
       - mbtiny dist
       - ls -l
 
-  - name: Install (perl 5.30)
+  - &installation
+    name: Install (perl 5.30)
     image: perl:5.30
     depends_on:
-      - Build the dist
+      - Build
     commands:
       - echo *.tar.gz
       - cpanm -q *.tar.gz
 
-  - name: Install (perl 5.28)
+  - << : *installation
+    name: Install (perl 5.28)
     image: perl:5.28
-    depends_on:
-      - Build the dist
-    commands:
-      - echo *.tar.gz
-      - cpanm -q *.tar.gz
 
-  - name: Install (perl 5.26)
+  - << : *installation
+    name: Install (perl 5.26)
     image: perl:5.26
-    depends_on:
-      - Build the dist
-    commands:
-      - echo *.tar.gz
-      - cpanm -q *.tar.gz
 
-  - name: Install (perl 5.18)
+  - << : *installation
+    name: Install (perl 5.24)
+    image: perl:5.24
+
+  - << : *installation
+    name: Install (perl 5.24)
+    image: perl:5.24
+
+  - << : *installation
+    name: Install (perl 5.22)
+    image: perl:5.22
+
+  - << : *installation
+    name: Install (perl 5.20)
+    image: perl:5.20
+
+  - << : *installation
+    name: Install (perl 5.18)
     image: perl:5.18
-    depends_on:
-      - Build the dist
-    commands:
-      - echo *.tar.gz
-      - cpanm -q *.tar.gz
