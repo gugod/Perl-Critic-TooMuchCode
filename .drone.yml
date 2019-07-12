@@ -32,11 +32,6 @@ steps:
   - << : *installation
     name: Install (centos, perl 5.26)
     image: centos/perl-526-centos7:latest
-    commands:
-      - curl -L https://cpanmin.us | perl - --sudo App::cpanminus
-      - echo *.tar.gz
-      - cpanm --notest -q *.tar.gz
-      - cpanm -q *.tar.gz
 
   - << : *installation
     name: Install (perl 5.24)
