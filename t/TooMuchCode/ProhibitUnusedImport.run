@@ -56,3 +56,17 @@ print 42;
 
 use Importer 'Foo' => qw( BAR QUX );
 print 42;
+
+## todo Importer syntax. List of str
+## failures 2
+## cut
+
+use Importer 'Foo' => ( 'BAR', 'QUX' );
+print 42;
+
+## todo General syntax. List of str
+## failures 2
+## cut
+
+use Foo ('BAR', 'QUX');
+print 42;
