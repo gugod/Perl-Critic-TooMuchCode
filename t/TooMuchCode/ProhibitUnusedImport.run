@@ -42,3 +42,17 @@ use Foo qw( FOO BAR BAZ );
 my $fb = hoi () ? FOO :
          hai () ? BAR :
          hui () ? BAZ ;
+
+## name Importer syntax. 1
+## failures 1
+## cut
+
+use Importer 'Foo' => qw( BAR );
+print 42;
+
+## name Importer syntax. 2
+## failures 2
+## cut
+
+use Importer 'Foo' => qw( BAR QUX );
+print 42;
