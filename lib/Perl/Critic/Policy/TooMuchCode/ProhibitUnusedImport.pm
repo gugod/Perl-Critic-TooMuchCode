@@ -37,7 +37,7 @@ sub violates {
     Perl::Critic::Policy::Variables::ProhibitUnusedVariables::_get_regexp_symbol_usage(\%used, $doc);
 
     my @violations;
-    my @to_report = grep { !$used{$_} } (sort keys %imported);
+    my @to_report = sort { $a cmp $b } grep { !$used{$_} } (keys %imported);
     for my $tok (@to_report) {
         for my $inc_mod (@{ $imported{$tok} }) {
             push @violations, $self->violation( "Unused import: $tok", "A token is imported but not used in the same code.", $inc_mod );
