@@ -15,7 +15,7 @@ sub applies_to           { return 'PPI::Document' }
 #---------------------------------------------------------------------------
 
 # special modules, where the args of import do not mean the symbols to be imported.
-my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign);
+my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign Exporter Test::Requires);
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
