@@ -70,3 +70,17 @@ print 42;
 
 use Foo ('BAR', 'QUX');
 print 42;
+
+## name Exporter
+## failures 0
+## cut
+
+use Exporter qw/import/;
+print 42;
+
+## name Test::Requires
+## failures 0
+## cut
+
+use Test::Requires qw/DBI/;
+print 42;
