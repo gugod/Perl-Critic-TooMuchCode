@@ -64,7 +64,14 @@ print 42;
 use Importer 'Foo' => ( 'BAR', 'QUX' );
 print 42;
 
-## todo General syntax. List of str
+## name General syntax. str
+## failures 1
+## cut
+
+use Foo 'BAR';
+print 42;
+
+## name General syntax. List of str
 ## failures 2
 ## cut
 

@@ -53,18 +53,26 @@ sub gather_imports_generic {
     my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') && !$_[1]->pragma }) || [];
     for my $st (@$include_statements) {
         next if $st->schild(0) eq 'no';
-        my $expr_qw = $st->find( sub { $_[1]->isa('PPI::Token::QuoteLike::Words'); }) or next;
-
         my $included_module = $st->schild(1);
         next if $is_special{$included_module};
 
-        if (@$expr_qw == 1) {
+        my $expr_qw = $st->find( sub { $_[1]->isa('PPI::Token::QuoteLike::Words'); });
+
+        if ($expr_qw && @$expr_qw == 1) {
             my $expr = $expr_qw->[0];
             my @words = $expr_qw->[0]->literal;
             for my $w (@words) {
                 next if $w =~ /\A [:\-\+]/x;
                 push @{ $imported->{$w} //=[] }, $included_module;
             }
+            next;
+        }
+
+        my $expr_q = $st->find( sub { $_[1]->isa('PPI::Token::Quote'); }) or next;
+        for my $expr (@$expr_q) {
+            my $word = $expr->can('literal') ? $expr->literal : $expr->string;
+            next if $word =~ /\A [:\-\+]/x;
+            push @{ $imported->{$word} //=[] }, $included_module;
         }
     }
 }
