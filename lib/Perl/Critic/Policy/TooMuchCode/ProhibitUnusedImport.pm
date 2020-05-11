@@ -15,7 +15,7 @@ sub applies_to           { return 'PPI::Document' }
 #---------------------------------------------------------------------------
 
 # special modules, where the args of import do not mean the symbols to be imported.
-my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign);
+my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign Exporter Test::Requires);
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -30,7 +30,7 @@ sub violates {
 
     ## Look for the signature of misparsed ternary operator.
     ## https://github.com/adamkennedy/PPI/issues/62
-    ## Once PPI is fixe, this workaround can be eliminated.
+    ## Once PPI is fixed, this workaround can be eliminated.
     Perl::Critic::TooMuchCode::__get_terop_usage(\%used, $doc);
 
     Perl::Critic::Policy::Variables::ProhibitUnusedVariables::_get_symbol_usage(\%used, $doc);
@@ -89,7 +89,7 @@ The word C<baz> can be removed if it is not mentioned in the rest of this progra
 
 Conventionally, this policy looks only for the C<use> statement with a C<qw()>
 operator at the end. This syntax is easier to deal with. It also works with
-the usaeg of C<Importer> module -- as long as a C<qw()> is there at the end:
+the usage of C<Importer> module -- as long as a C<qw()> is there at the end:
 
     use Importer 'Foo' => qw( baz );
 
