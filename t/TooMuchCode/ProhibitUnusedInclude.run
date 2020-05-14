@@ -12,6 +12,21 @@ print 42;
 use File::Spec;
 print 42;
 
+
+## name File::Which
+## failures 0
+## cut
+
+use File::Which;
+my $prog = which('ls');
+
+## name File::Which
+## failures 1
+## cut
+
+use File::Which;
+my $prog = "/bin/ls";
+
 ## name Try::Tiny
 ## failures 1
 ## cut
