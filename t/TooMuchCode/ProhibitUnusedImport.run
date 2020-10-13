@@ -84,3 +84,10 @@ print 42;
 
 use Test::Requires qw/DBI/;
 print 42;
+
+## name subroutine ref
+## failures 0
+## cut
+
+use Encode qw( decode );
+my $ref = \&decode;

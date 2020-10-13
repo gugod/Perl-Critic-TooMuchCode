@@ -24,7 +24,21 @@ sub violates {
     $self->gather_imports_generic( \%imported, $elem, $doc );
 
     my %used;
-    for my $el_word (@{ $elem->find( sub { $_[1]->isa('PPI::Token::Word') }) ||[]}) {
+    for my $el_word (
+        @{
+            $elem->find(
+                sub {
+                    $_[1]->isa('PPI::Token::Word')
+                        || ( $_[1]->isa('PPI::Token::Symbol')
+                        && $_[1]->symbol_type eq '&' );
+                }
+                )
+                || []
+        }
+    ) {
+        if ( $el_word->isa('PPI::Token::Symbol') ) {
+            $el_word =~ s{^&}{};
+        }
         $used{"$el_word"}++;
     }
 
