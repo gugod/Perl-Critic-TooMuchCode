@@ -11,6 +11,20 @@ use Perl::Critic::TooMuchCode;
 
 sub default_themes       { return qw( maintenance )     }
 sub applies_to           { return 'PPI::Document' }
+sub supported_parameters {
+    return (
+        {
+            name        => 'moose_type_modules',
+            description => 'Modules which import Moose-like types.',
+            behavior    => 'string list',
+            list_always_present_values => [
+                'MooseX::Types::Moose',
+                'MooseX::Types::Common::Numeric',
+                'MooseX::Types::Common::String',
+                ],
+        },
+    );
+}
 
 #---------------------------------------------------------------------------
 
@@ -19,6 +33,8 @@ my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
+
+    my $moose_types =  $self->{_moose_type_modules};
 
     my %imported;
     $self->gather_imports_generic( \%imported, $elem, $doc );
@@ -51,7 +67,22 @@ sub violates {
     Perl::Critic::Policy::Variables::ProhibitUnusedVariables::_get_regexp_symbol_usage(\%used, $doc);
 
     my @violations;
-    my @to_report = sort { $a cmp $b } grep { !$used{$_} } (keys %imported);
+    my @to_report = grep { !$used{$_} } (keys %imported);
+
+    # Maybe filter out Moose types.
+    if ( @to_report ) {
+        my %to_report = map { $_ => 1 } @to_report;
+
+        for my $import ( keys %to_report ) {
+            if ( exists $used{ 'is_' . $import } || exists $used { 'to_' . $import }
+                && exists $moose_types->{$imported{$import}->[0]} ) {
+                delete $to_report{$import};
+            }
+        }
+        @to_report = keys %to_report;
+    }
+    @to_report = sort { $a cmp $b } @to_report;
+
     for my $tok (@to_report) {
         for my $inc_mod (@{ $imported{$tok} }) {
             push @violations, $self->violation( "Unused import: $tok", "A token is imported but not used in the same code.", $inc_mod );
@@ -77,6 +108,7 @@ sub gather_imports_generic {
             my @words = $expr_qw->[0]->literal;
             for my $w (@words) {
                 next if $w =~ /\A [:\-\+]/x;
+
                 push @{ $imported->{$w} //=[] }, $included_module;
             }
         }
@@ -109,5 +141,42 @@ the usage of C<Importer> module -- as long as a C<qw()> is there at the end:
 
 This may be adjusted to be a bit smarter, but it is a clear convention in the
 beginning.
+
+=head2 Moose Types
+
+When importing types from a Moose type library, you may run into the following
+situation:
+
+    use My::Type::Library::Numeric qw( PositiveInt );
+
+    my $foo = 'bar';
+    my $ok  = is_PositiveInt($foo);
+
+In this case,  C<My::Type::Library::Numeric> exports C<is_PositiveInt> as well
+as C<PositiveInt>.  Even though C<PositiveInt> has not specifically been called
+by the code, the import has clearly been used. In order to allow for this case,
+you can specify class names of Moose-like type libraries which you intend to
+import from.
+
+A similar case exists for coercions:
+
+    use My::Type::Library::String qw( LowerCaseStr );
+    my $foo   = 'Bar';
+    my $lower = to_LowerCaseStr($foo);
+
+In the above case, C<to_LowerCaseStr> has not specifically been called by the
+code, but the import has clearly been used.
+
+The imports of C<is_*> and C<to_*> from the following modules be handled by
+default:
+
+    * MooseX::Types::Moose
+    * MooseX::Types::Common::Numeric
+    * MooseX::Types::Common::String
+
+You can configure this behaviour by adding more modules to the list:
+
+    [TooMuchCode::ProhibitUnusedImport]
+    moose_type_modules = My::Type::Library::Numeric My::Type::Library::String
 
 =cut
