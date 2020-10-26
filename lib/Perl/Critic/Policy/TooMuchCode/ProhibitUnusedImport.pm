@@ -14,6 +14,21 @@ sub applies_to           { return 'PPI::Document' }
 sub supported_parameters {
     return (
         {
+            name        => 'ignored_modules',
+            description => 'Modules which will be ignored by this policy.',
+            behavior    => 'string list',
+            list_always_present_values => [
+                'Exporter',
+                'Getopt::Long',
+                'Git::Sub',
+                'MooseX::Foreign',
+                'MouseX::Foreign',
+                'Test::Needs',
+                'Test::Requires',
+                'Test::RequiresInternet',
+            ],
+        },
+        {
             name        => 'moose_type_modules',
             description => 'Modules which import Moose-like types.',
             behavior    => 'string list',
@@ -21,15 +36,12 @@ sub supported_parameters {
                 'MooseX::Types::Moose',
                 'MooseX::Types::Common::Numeric',
                 'MooseX::Types::Common::String',
-                ],
+            ],
         },
     );
 }
 
 #---------------------------------------------------------------------------
-
-# special modules, where the args of import do not mean the symbols to be imported.
-my %is_special = map { $_ => 1 } qw(Getopt::Long MooseX::Foreign MouseX::Foreign Exporter Test::Requires);
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -95,13 +107,14 @@ sub violates {
 sub gather_imports_generic {
     my ( $self, $imported, $elem, $doc ) = @_;
 
+    my $is_ignored =  $self->{_ignored_modules};
     my $include_statements = $elem->find(sub { $_[1]->isa('PPI::Statement::Include') && !$_[1]->pragma }) || [];
     for my $st (@$include_statements) {
         next if $st->schild(0) eq 'no';
         my $expr_qw = $st->find( sub { $_[1]->isa('PPI::Token::QuoteLike::Words'); }) or next;
 
         my $included_module = $st->schild(1);
-        next if $is_special{$included_module};
+        next if exists $is_ignored->{$included_module};
 
         if (@$expr_qw == 1) {
             my $expr = $expr_qw->[0];
@@ -142,6 +155,14 @@ the usage of C<Importer> module -- as long as a C<qw()> is there at the end:
 This may be adjusted to be a bit smarter, but it is a clear convention in the
 beginning.
 
+=head2 Ignored Modules
+
+Modules which will be ignored, generally because the args of import do not mean
+the symbols to be imported.
+
+    [TooMuchCode::ProhibitUnusedImport]
+    ignored_modules = Git::Sub Regexp::Common
+
 =head2 Moose Types
 
 When importing types from a Moose type library, you may run into the following
@@ -176,7 +197,7 @@ default:
 
 You can configure this behaviour by adding more modules to the list:
 
-[TooMuchCode:ProhibitDuplicateLiteral]
-moose_type_modules = My::Type::Library::Numeric My::Type::Library::String
+    [TooMuchCode::ProhibitUnusedImport]
+    moose_type_modules = My::Type::Library::Numeric My::Type::Library::String
 
 =cut
