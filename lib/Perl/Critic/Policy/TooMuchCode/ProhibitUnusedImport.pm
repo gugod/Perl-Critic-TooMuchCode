@@ -155,8 +155,6 @@ the usage of C<Importer> module -- as long as a C<qw()> is there at the end:
 This may be adjusted to be a bit smarter, but it is a clear convention in the
 beginning.
 
-=head2 Ignored Modules
-
 Modules which will be ignored, generally because the args of import do not mean
 the symbols to be imported.
 
