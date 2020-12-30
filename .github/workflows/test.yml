@@ -1,0 +1,19 @@
+name: test
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Perl environment
+        uses: shogo82148/actions-setup-perl@v1.6.2
+
+      - name: Install Dependencies
+        run: cpanm -q -n --no-man-pages --installdeps . 
+
+      - name: prove
+        run: prove -v -r t/
