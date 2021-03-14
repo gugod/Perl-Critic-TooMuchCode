@@ -1,4 +1,7 @@
+.circleci/
+.drone.yml
 .github/
 .git/
 .gitignore
 MANIFEST.SKIP
+metamerge.json
