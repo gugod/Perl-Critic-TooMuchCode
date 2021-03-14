@@ -12,6 +12,7 @@ cpanfile
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitDuplicateLiteral.pm
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitDuplicateSub.pm
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitExcessiveColons.pm
+lib/Perl/Critic/Policy/TooMuchCode/ProhibitExtraStricture.pm
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitLargeBlock.pm
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitLargeTryBlock.pm
 lib/Perl/Critic/Policy/TooMuchCode/ProhibitUnnecessaryScalarKeyword.pm
@@ -24,6 +25,7 @@ metamerge.json
 t/TooMuchCode/ProhibitDuplicateLiteral.run
 t/TooMuchCode/ProhibitDuplicateSub.run
 t/TooMuchCode/ProhibitExcessiveColons.run
+t/TooMuchCode/ProhibitExtraStricture.run
 t/TooMuchCode/ProhibitLargeBlock.run
 t/TooMuchCode/ProhibitLargeTryBlock.run
 t/TooMuchCode/ProhibitUnnecessaryScalarKeyword.run
