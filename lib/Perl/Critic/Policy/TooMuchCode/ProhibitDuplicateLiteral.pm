@@ -1,7 +1,9 @@
 package Perl::Critic::Policy::TooMuchCode::ProhibitDuplicateLiteral;
 use strict;
 use warnings;
+use List::Util 1.33 qw(any);
 use Perl::Critic::Utils;
+use PPI;
 use parent 'Perl::Critic::Policy';
 
 sub default_themes       { return qw( bugs maintenance )     }
@@ -12,8 +14,21 @@ sub violates {
     my %firstSeen;
     my @violations;
 
+    my @allowed_strings;
+
+    my $allowed_strings_config = $self->__get_config->get('allowed_strings');
+
+    if (defined $allowed_strings_config) {
+        my $allowed_strings_parser = PPI::Document->new(\$allowed_strings_config);
+
+        for my $quoted_token (@{$allowed_strings_parser->find('PPI::Token::Quote') ||[]}) {
+            push @allowed_strings, $quoted_token->string;
+        }
+    }
+
     for my $el (@{ $doc->find('PPI::Token::Quote') ||[]}) {
         my $val = $el->string;
+        next if any { $_ eq $val } @allowed_strings;
         if ($firstSeen{"$val"}) {
             push @violations, $self->violation(
                 "A duplicate quoted literal at line: " . $el->line_number . ", column: " . $el->column_number,
@@ -60,6 +75,12 @@ TooMuchCode::ProhibitDuplicateLiteral - Don't repeat yourself with identical lit
 This policy checks if there are string/number literals with identical
 value in the same piece of perl code. Usually that's a small signal of
 repeating and perhaps a small chance of refactoring.
+
+Some strings may be allowed as duplicates by listing them as quoted
+strings via the C<allowed_strings> configuration option:
+
+    [TooMuchCode:ProhibitDuplicateLiteral]
+    allowed_strings = 'word' 'or any other quoted string'
 
 Certain numbers are whitelisted and not being checked in this policy
 because they are conventionally used everywhere.
