@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use version 0.77;
 use Perl::Critic::Utils ':booleans';
+use Perl::Critic::Utils::Constants qw(@STRICT_EQUIVALENT_MODULES);
 use parent 'Perl::Critic::Policy';
 
 sub default_themes       { return qw( maintenance )     }
@@ -15,13 +16,7 @@ sub supported_parameters {
             description => 'Modules which enables strictures.',
             behavior    => 'string list',
             list_always_present_values => [
-                'Moose',
-                'Mouse',
-                'Moo',
-                'Mo',
-                'Moose::Role',
-                'Mouse::Role',
-                'Moo::Role',
+                @STRICT_EQUIVALENT_MODULES,
                 'Test2::V0',
             ],
         }
