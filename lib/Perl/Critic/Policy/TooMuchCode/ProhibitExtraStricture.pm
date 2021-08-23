@@ -1,6 +1,7 @@
 package Perl::Critic::Policy::TooMuchCode::ProhibitExtraStricture;
 use strict;
 use warnings;
+use version 0.77;
 use Perl::Critic::Utils ':booleans';
 use Perl::Critic::Utils::Constants qw(@STRICT_EQUIVALENT_MODULES);
 use parent 'Perl::Critic::Policy';
@@ -30,11 +31,21 @@ sub violates {
     my @violations;
     my @includes = grep { $_->type eq "use" } @{ $doc->find('PPI::Statement::Include') ||[] };
     my @st_strict_pragma = grep { $_->pragma eq "strict" } @includes;
+    my $version_statement = $doc->find_first( sub { $_[1]->version } );
 
     if (@st_strict_pragma == 1) {
         my %is_stricture_module = %{$self->{_stricture_modules}};
 
         my @st_strict_module = grep { $is_stricture_module{ $_ } } map { $_->module } @includes;
+
+        if ($version_statement) {
+            my $version = version->parse( $version_statement->version );
+
+            if ( $version >= qv('v5.11.0') ) {
+                push @st_strict_module, $version;
+            }
+        }
+
         if (@st_strict_module) {
             push @violations, $self->violation(
                 "This `use strict` is redundant since ". $st_strict_module[0] . " also in place",
