@@ -105,3 +105,10 @@ use lib "$Bin/../../../../";
 
 use FindBin qw( $Bin );
 use lib $Bin . "/../../../../";
+
+## name $Bin in interpolated string in print. issue 19.
+## failures 0
+## cut
+
+use FindBin qw( $Bin );
+print "Here it is: $Bin";
