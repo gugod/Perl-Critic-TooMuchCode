@@ -91,3 +91,17 @@ print 42;
 
 use Encode qw( decode );
 my $ref = \&decode;
+
+## TODO $Bin. issue 19
+## failures 0
+## cut
+
+use FindBin qw( $Bin );
+use lib "$Bin/../../../../";
+
+## name $Bin. issue 19.
+## failures 0
+## cut
+
+use FindBin qw( $Bin );
+use lib $Bin . "/../../../../";
