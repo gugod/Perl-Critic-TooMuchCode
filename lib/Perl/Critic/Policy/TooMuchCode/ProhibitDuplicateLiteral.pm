@@ -9,26 +9,53 @@ use parent 'Perl::Critic::Policy';
 sub default_themes       { return qw( bugs maintenance )     }
 sub applies_to           { return 'PPI::Document' }
 
+sub supported_parameters {
+    return ({
+        name           => 'whitelist_numbers',
+        description    => 'A comma-separated list of numbers that can be allowed to occur multiple times.',
+        default_string => "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9",
+        behavior       => 'string',
+        parser         => \&_parse_whitelist_numbers,
+    }, {
+        name           => 'allowed_strings',
+        description    => 'A list of strings that can be allowed to occur multiple times.',
+        default_string => "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9",
+        behavior       => 'string',
+        parser         => \&_parse_allowed_strings,
+    });
+}
+
+sub _parse_whitelist_numbers {
+    my ($self, $param, $value) = @_;
+    my $default = $param->get_default_string();
+    my %nums = map { $_ => 1 } grep { defined($_) && $_ ne '' } map { split /\s*,\s*/ } ($default, $value //'');
+    $self->{_whitelist_numbers} = \%nums;
+    return undef;
+}
+
+sub _parse_allowed_strings {
+    my ($self, $param, $value) = @_;
+
+    my %whitelist;
+    if (defined $value) {
+        my $allowed_strings_parser = PPI::Document->new(\$value);
+        for my $quoted_token (@{$allowed_strings_parser->find('PPI::Token::Quote') ||[]}) {
+            $whitelist{ $quoted_token->string } = 1;
+        }
+    }
+
+    $self->{"_allowed_strings"} = \%whitelist;
+}
+
 sub violates {
     my ($self, undef, $doc) = @_;
     my %firstSeen;
     my @violations;
 
-    my @allowed_strings;
-
-    my $allowed_strings_config = $self->__get_config->get('allowed_strings');
-
-    if (defined $allowed_strings_config) {
-        my $allowed_strings_parser = PPI::Document->new(\$allowed_strings_config);
-
-        for my $quoted_token (@{$allowed_strings_parser->find('PPI::Token::Quote') ||[]}) {
-            push @allowed_strings, $quoted_token->string;
-        }
-    }
-
     for my $el (@{ $doc->find('PPI::Token::Quote') ||[]}) {
         my $val = $el->string;
-        next if any { $_ eq $val } @allowed_strings;
+        next if $self->{"_allowed_strings"}{$val};
+
         if ($firstSeen{"$val"}) {
             push @violations, $self->violation(
                 "A duplicate quoted literal at line: " . $el->line_number . ", column: " . $el->column_number,
@@ -40,14 +67,10 @@ sub violates {
         }
     }
 
-    my $whitelist = $self->__get_config->get('whitelist_numbers') // '';
-
-    my %whitelist = map { $_ => 1 } 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9, split /\s*,\s*/, $whitelist;
-
     %firstSeen = ();
     for my $el (@{ $doc->find('PPI::Token::Number') ||[]}) {
         my $val = $el->content;
-        next if $whitelist{"$val"};
+        next if $self->{"_whitelist_numbers"}{"$val"};
         if ($firstSeen{"$val"}) {
             push @violations, $self->violation(
                 "A duplicate numerical literal at line: " . $el->line_number . ", column: " . $el->column_number,

@@ -54,3 +54,24 @@ my $o = foo() ? 1 : 0;
 my $two = 1 + 1 + 0;
 my $n = 42;
 print 42;
+
+## name duplicate numbers
+## failures 1
+## cut
+
+if ($a < 42) {
+  if ($b < 42) {
+    print("Hello World")
+  }
+}
+
+## name certain duplicate numbers are OK
+## parms { whitelist_numbers => '42' }
+## failures 0
+## cut
+
+if ($a < 42) {
+  if ($b < 42) {
+    print("Hello World")
+  }
+}
