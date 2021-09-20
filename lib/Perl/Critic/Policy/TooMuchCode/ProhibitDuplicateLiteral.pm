@@ -57,20 +57,6 @@ sub _parse_whitelist_numbers {
     return undef;
 }
 
-sub _parse_allowed_strings {
-    my ($self, $param, $value) = @_;
-
-    my %whitelist;
-    if (defined $value) {
-        my $allowed_strings_parser = PPI::Document->new(\$value);
-        for my $quoted_token (@{$allowed_strings_parser->find('PPI::Token::Quote') ||[]}) {
-            $whitelist{ $quoted_token->string } = 1;
-        }
-    }
-
-    $self->{"_allowed_strings"} = \%whitelist;
-}
-
 sub violates {
     my ($self, undef, $doc) = @_;
     my %firstSeen;
@@ -125,29 +111,41 @@ This policy checks if there are string/number literals with identical
 value in the same piece of perl code. Usually that's a small signal of
 repeating and perhaps a small chance of refactoring.
 
-Some strings may be allowed as duplicates by listing them as quoted
-strings via the C<allowed_strings> configuration option:
+=head1 CONFIGURATION
+
+Some strings/numbers may be allowed to have duplicates by listing them
+in the C<whitelist> parameter in the configs:
 
     [TooMuchCode:ProhibitDuplicateLiteral]
-    allowed_strings = 'word' 'or any other quoted string'
+    whitelist = 'present' "forty two" 42
 
-Certain numbers are whitelisted and not being checked in this policy
-because they are conventionally used everywhere.
+The values is a space-separated list of numbers or quoted string.
 
-The default whitelist is 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9
+The default values in the whitelist are: C<0 1>. This two numbers are
+always part of whitelist and cannot be removed.
+
+Please be aware that, a string literal and its numerical literal
+counterpart (C<1> vs C<"1">) are considered to be two distinct literal
+values. Usually one does not use both literal representations of the
+same value in the same piece of code so it shouldn't make much
+difference. However, this is just an arbitrary choice and might be
+changed in future versions.
+
+=head1 DEPRECATED CONFIGURATIONS
+
+The C<whitelist> parameter replace another parameter name C<whitelist_numbers>, which serves the same purpose but only numbers were supported.
+
+The default value of whitelist_numbers is 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9
 
 To opt-out more, add C<whitelist_numbers> like this in C<.perlcriticrc>
 
     [TooMuchCode::ProhibitDuplicateLiteral]
     whitelist_numbers = 42, 10
 
-This configurable parameter appends to the default whitelist and there
-are no way to remove the default whitelist.
+The numbers given to C<whitelist_numbers> are appended and there is no
+way to remove default values.
 
-A string literal with its numerical literal counterpart with same
-value (C<1> vs C<"1">) are considered to be two distinct values.
-Since it's a bit rare to explicitly hard-code number as string literals,
-it shouldn't make much difference otherwise. However this is just
-an arbitrary choice and might be adjusted in future versions.
+It is still supported in current release but will be removed in near
+future. Please check the content of C<Changes>for the announcement.
 
 =cut
