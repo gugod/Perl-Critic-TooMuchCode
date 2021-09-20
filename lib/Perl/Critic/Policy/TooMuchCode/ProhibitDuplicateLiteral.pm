@@ -16,12 +16,6 @@ sub supported_parameters {
         default_string => "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9",
         behavior       => 'string',
         parser         => \&_parse_whitelist_numbers,
-    }, {
-        name           => 'allowed_strings',
-        description    => 'A list of strings that can be allowed to occur multiple times.',
-        default_string => "0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -2, -3, -4, -5, -6, -7, -8, -9",
-        behavior       => 'string',
-        parser         => \&_parse_allowed_strings,
     }, , {
         name           => 'whitelist',
         description    => 'A list of numbers or quoted strings that can be allowed to occur multiple times.',
@@ -37,11 +31,11 @@ sub _parse_whitelist {
 
     my %whitelist;
     for my $v (grep { defined } ($default, $value)) {
-        my $allowed_strings_parser = PPI::Document->new(\$v);
-        for my $token (@{$allowed_strings_parser->find('PPI::Token::Number') ||[]}) {
+        my $parser = PPI::Document->new(\$v);
+        for my $token (@{$parser->find('PPI::Token::Number') ||[]}) {
             $whitelist{ $token->content } = 1;
         }
-        for my $quoted_token (@{$allowed_strings_parser->find('PPI::Token::Quote') ||[]}) {
+        for my $quoted_token (@{$parser->find('PPI::Token::Quote') ||[]}) {
             $whitelist{ $quoted_token->string } = 1;
         }
     }
@@ -64,7 +58,6 @@ sub violates {
 
     for my $el (@{ $doc->find('PPI::Token::Quote') ||[]}) {
         my $val = $el->string;
-        next if $self->{"_allowed_strings"}{$val};
         next if $self->{"_whitelist"}{$val};
 
         if ($firstSeen{"$val"}) {
