@@ -110,7 +110,7 @@ repeating and perhaps a small chance of refactoring.
 Some strings/numbers may be allowed to have duplicates by listing them
 in the C<whitelist> parameter in the configs:
 
-    [TooMuchCode:ProhibitDuplicateLiteral]
+    [TooMuchCode::ProhibitDuplicateLiteral]
     whitelist = 'present' "forty two" 42
 
 The values is a space-separated list of numbers or quoted string.
