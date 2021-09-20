@@ -98,3 +98,25 @@ if ($a < 42) {
     print("Hello World");
   }
 }
+
+## name whitelisting numbers also whitelist their string counterpart
+## parms { whitelist => '42' }
+## failures 0
+## cut
+
+if ($a eq "42") {
+  if ($b ne "42") {
+    print("Hello World");
+  }
+}
+
+## name whitelisting strings also whitelist their numerical counterpart
+## parms { whitelist => '"42"' }
+## failures 0
+## cut
+
+if ($a == 42) {
+  if ($b != 42) {
+    print("Hello World");
+  }
+}

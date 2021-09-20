@@ -35,8 +35,8 @@ sub _parse_whitelist {
         for my $token (@{$parser->find('PPI::Token::Number') ||[]}) {
             $whitelist{ $token->content } = 1;
         }
-        for my $quoted_token (@{$parser->find('PPI::Token::Quote') ||[]}) {
-            $whitelist{ $quoted_token->string } = 1;
+        for my $token (@{$parser->find('PPI::Token::Quote') ||[]}) {
+            $whitelist{ $token->string } = 1;
         }
     }
     $self->{_whitelist} = \%whitelist;
@@ -57,13 +57,15 @@ sub violates {
     my @violations;
 
     for my $el (@{ $doc->find('PPI::Token::Quote') ||[]}) {
+        next if $el->can("interpolations") && $el->interpolations();
+
         my $val = $el->string;
         next if $self->{"_whitelist"}{$val};
 
         if ($firstSeen{"$val"}) {
             push @violations, $self->violation(
-                "A duplicate quoted literal at line: " . $el->line_number . ", column: " . $el->column_number,
-                "Another string literal in the same piece of code.",
+                "A duplicate literal value at line: " . $el->line_number . ", column: " . $el->column_number,
+                "Another literal value in the same piece of code.",
                 $el,
             );
         } else {
@@ -71,19 +73,18 @@ sub violates {
         }
     }
 
-    %firstSeen = ();
     for my $el (@{ $doc->find('PPI::Token::Number') ||[]}) {
         my $val = $el->content;
-        next if $self->{"_whitelist_numbers"}{"$val"};
+        next if $self->{"_whitelist_numbers"}{$val};
         next if $self->{"_whitelist"}{$val};
-        if ($firstSeen{"$val"}) {
+        if ($firstSeen{$val}) {
             push @violations, $self->violation(
-                "A duplicate numerical literal at line: " . $el->line_number . ", column: " . $el->column_number,
-                "Another string literal in the same piece of code.",
+                "A duplicate literal value at line: " . $el->line_number . ", column: " . $el->column_number,
+                "Another literal value in the same piece of code.",
                 $el,
             );
         } else {
-            $firstSeen{"$val"} = $el->location;
+            $firstSeen{$val} = $el->location;
         }
     }
 
@@ -118,11 +119,8 @@ The default values in the whitelist are: C<0 1>. This two numbers are
 always part of whitelist and cannot be removed.
 
 Please be aware that, a string literal and its numerical literal
-counterpart (C<1> vs C<"1">) are considered to be two distinct literal
-values. Usually one does not use both literal representations of the
-same value in the same piece of code so it shouldn't make much
-difference. However, this is just an arbitrary choice and might be
-changed in future versions.
+counterpart (C<1> vs C<"1">) are considered to be the
+same. Whitelisting C<"42"> would also whitelist C<42> together.
 
 =head1 DEPRECATED CONFIGURATIONS
 
