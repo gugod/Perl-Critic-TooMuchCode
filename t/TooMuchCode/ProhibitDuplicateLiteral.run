@@ -75,3 +75,26 @@ if ($a < 42) {
     print("Hello World")
   }
 }
+
+## name without whitelist
+## failures 2
+## cut
+
+if ($a < 42) {
+  if ($b < 42) {
+    print("Hello World");
+    print("Hello World");
+  }
+}
+
+## name with whitelist
+## parms { whitelist => '42 "Hello World"' }
+## failures 0
+## cut
+
+if ($a < 42) {
+  if ($b < 42) {
+    print("Hello World");
+    print("Hello World");
+  }
+}
