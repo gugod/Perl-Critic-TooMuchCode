@@ -100,7 +100,7 @@ in the C<allowlist> parameter in the configs:
 
 The values is a space-separated list of numbers or quoted string.
 
-The default values in the allowlist are: C<0 1>. This two numbers are
+The default values in the allowlist are: C<0 1>. These two numbers are
 always part of allowlist and cannot be removed.
 
 Please be aware that, a string literal and its numerical literal
