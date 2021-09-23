@@ -141,3 +141,10 @@ use Mojo::JSON qw(decode_json encode_json);
           encode_json
       );
   }
+
+## name other var assigments with symbols in their literal forms should not be counted as usage
+## failures 3
+## cut
+
+use Foo qw(foo $bar @baz);
+my @foo = qw(foo $bar @baz);
