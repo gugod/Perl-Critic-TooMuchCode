@@ -114,3 +114,17 @@ use lib $Bin . "/../../../../";
 use FindBin qw( $Bin );
 my $bar;
 print "Here it is: $Bin";
+
+## name re-exporting is a form of using. with @EXPORT_OK. github issue 18.
+## failures 0
+## cut
+
+use Foo qw( foo $bar @baz );
+our @EXPORT_OK = qw(foo $bar @baz);
+
+## name re-exporting is a form of using. with @EXPORT. github issue 18.
+## failures 0
+## cut
+
+use Foo qw( foo $bar @baz );
+our @EXPORT = qw(foo $bar @baz);
