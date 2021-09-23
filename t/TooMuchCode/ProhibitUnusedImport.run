@@ -128,3 +128,16 @@ our @EXPORT_OK = qw(foo $bar @baz);
 
 use Foo qw( foo $bar @baz );
 our @EXPORT = qw(foo $bar @baz);
+
+## name re-exporting. with code sample from github issue 18.
+## failures 0
+## cut
+
+use Mojo::JSON qw(decode_json encode_json);
+
+  {
+      our @EXPORT_OK = qw(
+          decode_json
+          encode_json
+      );
+  }
