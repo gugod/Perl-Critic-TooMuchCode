@@ -1,3 +1,5 @@
+	- ProhibitDuplicateLiteral: the parameter "whitelist" is renamed to "allowlist"
+	- ProhibitDuplicateLiteral: the parameter "whitelist_number" is removed
 	- ProhibitUnusedImport: Deal with the special form of assigning to @EXPORT and @EXPORT_OK. Github PR #29, issue #18
 
 0.17
