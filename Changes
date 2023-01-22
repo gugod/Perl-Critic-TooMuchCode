@@ -1,3 +1,5 @@
+	- ProhibitDuplicateLiteral: Improve description by including the literal and excluding line and column numbers.
+
 0.18
 	- Released at 2021-09-29T08:43:04+0900
 	- ProhibitDuplicateLiteral: the parameter "whitelist" is renamed to "allowlist"
