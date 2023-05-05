@@ -1,6 +1,6 @@
 package Perl::Critic::TooMuchCode;
 use strict;
-our $VERSION='0.18';
+our $VERSION='0.19';
 
 ## Look for the signature of misparsed ternary operator.
 ## https://github.com/adamkennedy/PPI/issues/62
