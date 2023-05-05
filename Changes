@@ -1,3 +1,5 @@
+	- ProhibitDuplicateSub: Allow multiple BEGIN, UNITCHECK, CHECK, INIT and END code blocks
+
 0.18
 	- Released at 2021-09-29T08:43:04+0900
 	- ProhibitDuplicateLiteral: the parameter "whitelist" is renamed to "allowlist"
