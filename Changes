@@ -1,3 +1,4 @@
+	- ProhibitDuplicateLiteral: Improve description by including the literal and excluding line and column numbers.
 	- ProhibitDuplicateSub: Allow multiple BEGIN, UNITCHECK, CHECK, INIT and END code blocks
 
 0.18
