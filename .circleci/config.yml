@@ -12,8 +12,8 @@ jobs:
     steps:
       - checkout
       - run: perl -V
-      - run: cpanm --notest Test2::Harness; cpanm --notest --installdeps .
-      - run: yath
+      - run: cpanm --notest --installdeps .
+      - run: yath test --qvf
 workflows:
   version: 2
   test_and_critic:

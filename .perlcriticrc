@@ -3,3 +3,6 @@ verbose = %f:%l:%c:[%p] %m.\n
 
 only = 1
 include = RequireUseStrict
+
+[TestingAndDebugging::RequireUseStrict]
+equivalent_modules = Test2::V0

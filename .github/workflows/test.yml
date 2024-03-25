@@ -16,5 +16,5 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
       - name: Install Dependencies
         run: cpanm -q -n --no-man-pages --installdeps . 
-      - name: prove
-        run: prove -l -v -r t/
+      - name: yath
+        run: yath test --qvf

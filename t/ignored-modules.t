@@ -1,10 +1,7 @@
 #!perl
-
-use strict;
-
+use Test2::V0;
 use Perl::Critic ();
 use Perl::Critic::Utils qw{ :severities };
-use Test::More;
 
 use constant POLICY =>
     'Perl::Critic::Policy::TooMuchCode::ProhibitUnusedImport';

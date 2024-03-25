@@ -1,12 +1,7 @@
 #!perl
-
-use strict;
-use warnings;
-
+use Test2::V0;
 use Perl::Critic;
 use Perl::Critic::Utils qw{ :severities };
-use Test::More;
-
 use Data::Dumper;
 
 use constant POLICY => 'Perl::Critic::Policy::TooMuchCode::ProhibitLargeBlock';
