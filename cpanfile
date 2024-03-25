@@ -6,5 +6,6 @@ requires 'Scalar::Util', '1.50';
 requires 'version', '0.77';
 
 on test => sub {
+    requires 'Test2::Harness';
     requires 'Test2::V0';
 };

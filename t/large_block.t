@@ -5,7 +5,7 @@ use warnings;
 
 use Perl::Critic;
 use Perl::Critic::Utils qw{ :severities };
-use Test::More;
+use Test2::V0;
 
 use Data::Dumper;
 
