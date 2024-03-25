@@ -1,4 +1,3 @@
-use strict;
 use Test2::V0;
 use Test2::Tools::Exception qw/lives/;
 
