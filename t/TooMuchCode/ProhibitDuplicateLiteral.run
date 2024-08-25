@@ -120,3 +120,35 @@ if ($a == 42) {
     print("Hello World");
   }
 }
+
+## name allow duplicate built-in reference types
+## failures 0
+## cut
+
+my $reference_types = [
+  'ARRAY',
+  'CODE',
+  'FORMAT',
+  'GLOB',
+  'HASH',
+  'IO',
+  'LVALUE',
+  'REF',
+  'REGEXP',
+  'SCALAR',
+  'VSTRING',
+];
+
+my $reference_types_again = [
+  'ARRAY',
+  'CODE',
+  'FORMAT',
+  'GLOB',
+  'HASH',
+  'IO',
+  'LVALUE',
+  'REF',
+  'REGEXP',
+  'SCALAR',
+  'VSTRING',
+];

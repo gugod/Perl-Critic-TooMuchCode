@@ -33,6 +33,25 @@ sub _parse_allowlist {
             $allowlist{ $token->string } = 1;
         }
     }
+
+    my @allowed_reference_types = qw(
+      ARRAY
+      CODE
+      FORMAT
+      GLOB
+      HASH
+      IO
+      LVALUE
+      REF
+      REGEXP
+      SCALAR
+      VSTRING
+    );
+
+    for my $reference_type (@allowed_reference_types) {
+        $allowlist{$reference_type} = 1;
+    }
+
     $self->{_allowlist} = \%allowlist;
     return undef;
 }
