@@ -240,7 +240,7 @@ sub gather_uses_try_family {
 
 =head1 NAME
 
-TooMuchCode::ProhibitUnusedInclude -- Find unused include statements.
+TooMuchCode::ProhibitUnusedInclude - Find unused include statements.
 
 =head1 DESCRIPTION
 
