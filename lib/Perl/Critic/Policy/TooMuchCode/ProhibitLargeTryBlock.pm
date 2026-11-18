@@ -37,7 +37,7 @@ sub __use_try_tiny {
 
 =head1 NAME
 
-TooMuchCode::ProhibitLargeTryBlock -- Find oversized `try..catch` block.
+TooMuchCode::ProhibitLargeTryBlock - Find oversized `try..catch` block.
 
 =head1 DESCRIPTION
 

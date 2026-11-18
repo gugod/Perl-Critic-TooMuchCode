@@ -127,7 +127,7 @@ sub gather_imports_generic {
 
 =head1 NAME
 
-TooMuchCode::ProhibitUnusedImport -- Find unused imports
+TooMuchCode::ProhibitUnusedImport - Find unused imports
 
 =head1 DESCRIPTION
 

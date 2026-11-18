@@ -53,7 +53,7 @@ sub violates {
 
 =head1 NAME
 
-TooMuchCode::ProhibitUnusedImport -- Find 'use utf8' statement that produces (almost) no effect.
+TooMuchCode::ProhibitUnusedImport - Find 'use utf8' statement that produces (almost) no effect.
 
 =head1 DESCRIPTION
 

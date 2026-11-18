@@ -59,7 +59,7 @@ sub violates {
 
 =head1 NAME
 
-TooMuchCode::ProhibitUnusedConstant -- Find unused constants.
+TooMuchCode::ProhibitUnusedConstant - Find unused constants.
 
 =head1 DESCRIPTION
 

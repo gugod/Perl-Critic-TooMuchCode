@@ -35,7 +35,7 @@ sub violates {
 
 =head1 NAME
 
-TooMuchCode::ProhibitLargeBlock -- Find oversized blocks
+TooMuchCode::ProhibitLargeBlock - Find oversized blocks
 
 =head1 DESCRIPTION
 

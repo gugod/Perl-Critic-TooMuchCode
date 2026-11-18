@@ -65,7 +65,7 @@ sub violates {
 
 =head1 NAME
 
-TooMuchCode::ProhibitExtraStricture -- Find unnecessary 'use strict'
+TooMuchCode::ProhibitExtraStricture - Find unnecessary 'use strict'
 
 =head1 DESCRIPTION
 
